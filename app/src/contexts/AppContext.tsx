@@ -17,6 +17,7 @@ const defaultState: AppState = {
   transactions: initialTransactions,
   inventoryRecords: [],
   dailySales: initialDailySales,
+  tournaments: [],
 }
 
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -63,9 +64,17 @@ function appReducer(state: AppState, action: AppAction): AppState {
     case 'UPDATE_DENOMINATION':
       return { ...state, denominations: state.denominations.map(d => d.id === action.denomination.id ? action.denomination : d) }
 
+    // トーナメント
+    case 'ADD_TOURNAMENT':
+      return { ...state, tournaments: [action.tournament, ...state.tournaments] }
+    case 'UPDATE_TOURNAMENT':
+      return { ...state, tournaments: state.tournaments.map(t => t.id === action.tournament.id ? action.tournament : t) }
+    case 'DELETE_TOURNAMENT':
+      return { ...state, tournaments: state.tournaments.filter(t => t.id !== action.id) }
+
     // 状態復元
     case 'LOAD_STATE':
-      return action.state
+      return { ...defaultState, ...action.state }
 
     default:
       return state

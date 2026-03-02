@@ -78,6 +78,58 @@ export interface Staff {
   isActive: boolean
 }
 
+// トーナメント — ブラインドレベル
+export interface BlindLevel {
+  level: number
+  smallBlind: number
+  bigBlind: number
+  ante: number
+  durationMinutes: number     // このレベルの持続時間（分）
+}
+
+// トーナメント — 参加者
+export interface TournamentEntry {
+  id: string
+  playerName: string
+  tableId?: string
+  seatNumber?: number
+  rebuys: number
+  addons: number
+  enteredAt: string           // ISO 8601
+  eliminatedAt?: string       // ISO 8601（脱落時刻）
+  finishPosition?: number     // 最終順位
+  prizeAmount?: number        // 賞金額
+}
+
+// トーナメント — 賞品配分
+export interface PrizeLevel {
+  position: number            // 順位（1, 2, 3...）
+  percentage: number          // 賞金プールに対する割合（%）
+  label: string               // "1位", "2位" 等
+}
+
+// トーナメント
+export type TournamentStatus = 'upcoming' | 'registering' | 'running' | 'paused' | 'finished'
+
+export interface Tournament {
+  id: string
+  name: string
+  date: string                // YYYY-MM-DD
+  status: TournamentStatus
+  entryFee: number            // エントリーフィー（円）
+  rebuyFee: number            // リバイフィー（円）
+  addonFee: number            // アドオンフィー（円）
+  startingChips: number       // 初期チップ数
+  maxPlayers: number
+  blindStructure: BlindLevel[]
+  currentLevel: number        // 現在のブラインドレベル（index）
+  levelStartedAt?: string     // 現在レベルの開始時刻（ISO 8601）
+  entries: TournamentEntry[]
+  prizeStructure: PrizeLevel[]
+  note?: string
+  createdAt: string
+}
+
 // アプリ全体の状態
 export interface AppState {
   // マスタデータ
@@ -90,6 +142,8 @@ export interface AppState {
   inventoryRecords: InventoryRecord[]
   // 売上
   dailySales: DailySales[]
+  // トーナメント
+  tournaments: Tournament[]
 }
 
 // Reducer アクション
@@ -111,5 +165,9 @@ export type AppAction =
   // 額面設定
   | { type: 'ADD_DENOMINATION'; denomination: ChipDenomination }
   | { type: 'UPDATE_DENOMINATION'; denomination: ChipDenomination }
+  // トーナメント
+  | { type: 'ADD_TOURNAMENT'; tournament: Tournament }
+  | { type: 'UPDATE_TOURNAMENT'; tournament: Tournament }
+  | { type: 'DELETE_TOURNAMENT'; id: string }
   // 状態復元
   | { type: 'LOAD_STATE'; state: AppState }

@@ -1,4 +1,4 @@
-import { Coins, TrendingUp, Table2, Users } from 'lucide-react'
+import { Coins, TrendingUp, Table2, Users, Trophy } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 
 export default function DashboardTab() {
@@ -20,6 +20,10 @@ export default function DashboardTab() {
   // 直近の取引（5件）
   const recentTransactions = state.transactions.slice(0, 5)
 
+  // トーナメント
+  const activeTournaments = state.tournaments.filter(t => t.status === 'running' || t.status === 'paused')
+  const upcomingTournaments = state.tournaments.filter(t => t.status === 'upcoming' || t.status === 'registering')
+
   const typeLabels: Record<string, string> = {
     purchase: 'チップ購入',
     return: 'チップ返却',
@@ -37,7 +41,7 @@ export default function DashboardTab() {
   return (
     <div className="space-y-4">
       {/* サマリーカード */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <SummaryCard
           icon={<Coins size={20} />}
           label="本日チップ売上"
@@ -66,6 +70,13 @@ export default function DashboardTab() {
           color="text-purple-400"
           bgColor="bg-purple-900/20"
         />
+        <SummaryCard
+          icon={<Trophy size={20} />}
+          label="トーナメント"
+          value={activeTournaments.length > 0 ? `${activeTournaments.length}件 開催中` : upcomingTournaments.length > 0 ? `${upcomingTournaments.length}件 予定` : 'なし'}
+          color="text-amber-400"
+          bgColor="bg-amber-900/20"
+        />
       </div>
 
       {/* テーブル状況 */}
@@ -92,6 +103,43 @@ export default function DashboardTab() {
           ))}
         </div>
       </div>
+
+      {/* トーナメント情報 */}
+      {(activeTournaments.length > 0 || upcomingTournaments.length > 0) && (
+        <div className="rounded-xl border border-[#2a3050] bg-[#121a2e] p-4">
+          <h2 className="text-sm font-bold text-[#8090b0] mb-3">トーナメント</h2>
+          <div className="space-y-2">
+            {[...activeTournaments, ...upcomingTournaments].slice(0, 3).map(t => {
+              const statusLabel: Record<string, string> = {
+                upcoming: '予定',
+                registering: '受付中',
+                running: '開催中',
+                paused: '一時停止',
+              }
+              const statusColor: Record<string, string> = {
+                upcoming: 'text-[#8090b0]',
+                registering: 'text-blue-400',
+                running: 'text-emerald-400',
+                paused: 'text-amber-400',
+              }
+              return (
+                <div key={t.id} className="flex items-center justify-between py-2 border-b border-[#2a3050] last:border-0">
+                  <div>
+                    <span className="text-sm font-medium">{t.name}</span>
+                    <span className="text-xs text-[#8090b0] ml-2">{t.date}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-[#8090b0]">{t.entries.length}/{t.maxPlayers}人</span>
+                    <span className={`text-xs font-bold ${statusColor[t.status]}`}>
+                      {statusLabel[t.status]}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* 直近の取引 */}
       <div className="rounded-xl border border-[#2a3050] bg-[#121a2e] p-4">

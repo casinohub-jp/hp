@@ -1,18 +1,20 @@
 import { useState } from 'react'
-import { LayoutDashboard, Coins, ClipboardCheck, BarChart3, Settings } from 'lucide-react'
+import { LayoutDashboard, Coins, ClipboardCheck, BarChart3, Settings, Trophy } from 'lucide-react'
 import DashboardTab from './DashboardTab'
 import ChipManagementTab from './ChipManagementTab'
 import InventoryTab from './InventoryTab'
 import ReportTab from './ReportTab'
 import SettingsTab from './SettingsTab'
+import TournamentTab from './TournamentTab'
 
-type Tab = 'dashboard' | 'chips' | 'inventory' | 'report' | 'settings'
+type Tab = 'dashboard' | 'chips' | 'inventory' | 'report' | 'tournament' | 'settings'
 
 const tabs: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'dashboard', label: 'ダッシュボード', icon: LayoutDashboard },
   { id: 'chips', label: 'チップ管理', icon: Coins },
   { id: 'inventory', label: '棚卸し', icon: ClipboardCheck },
   { id: 'report', label: '売上レポート', icon: BarChart3 },
+  { id: 'tournament', label: 'トーナメント', icon: Trophy },
   { id: 'settings', label: '設定', icon: Settings },
 ]
 
@@ -62,6 +64,7 @@ export default function AdminPage() {
         {activeTab === 'chips' && <ChipManagementTab />}
         {activeTab === 'inventory' && <InventoryTab />}
         {activeTab === 'report' && <ReportTab />}
+        {activeTab === 'tournament' && <TournamentTab />}
         {activeTab === 'settings' && <SettingsTab />}
       </main>
     </div>

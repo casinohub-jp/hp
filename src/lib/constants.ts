@@ -1,7 +1,7 @@
 export const BRAND = {
   name: "Casinohub",
   url: "https://casinohub.jp",
-  description: "アミューズメントカジノ向け店舗管理SaaS",
+  description: "アミューズメントカジノ向けトーナメント管理SaaS",
 };
 
 export const NAV_ITEMS = [
@@ -13,24 +13,24 @@ export const NAV_ITEMS = [
 
 export const FEATURES = [
   {
-    title: "チップ管理",
-    description: "購入・払出・回収を正確に記録。CSV出力にも対応。",
-    icon: "Coins" as const,
+    title: "トーナメント運営",
+    description: "大会の作成・参加者登録・ブラインドレベル設定まで、一画面でまとめて管理。",
+    icon: "Trophy" as const,
   },
   {
-    title: "売上レポート",
-    description: "日次・月次の売上を自動集計。数字で店舗の状態を把握。",
-    icon: "BarChart3" as const,
+    title: "参加者管理・チェックイン",
+    description: "事前エントリーと当日チェックインをスムーズに。レイトレジスト・リエントリーにも対応。",
+    icon: "UserPlus" as const,
   },
   {
-    title: "棚卸し",
-    description: "保管庫・テーブル別のチップカウントと差異チェックを効率化。",
-    icon: "ClipboardCheck" as const,
-  },
-  {
-    title: "テーブル管理",
-    description: "テーブルの稼働状況やディーラーのアサインをリアルタイムで把握。",
+    title: "テーブル・シート割当",
+    description: "参加人数に応じたテーブル配置と席順を自動生成。テーブルブレイクの再配置もワンタップ。",
     icon: "LayoutGrid" as const,
+  },
+  {
+    title: "順位集計・プライズ配分",
+    description: "リアルタイムで順位を更新し、賞金・ポイントの配分を自動計算。集計ミスをゼロに。",
+    icon: "Award" as const,
   },
 ];
 
@@ -48,7 +48,7 @@ export const FAQ_ITEMS = [
   {
     question: "どんな店舗に向いていますか？",
     answer:
-      "ポーカールーム、カジノバー、アミューズメントカジノ、カジノイベント運営会社など、カジノゲームを扱うすべての店舗にご利用いただけます。",
+      "トーナメントを定期開催しているポーカールーム、アミューズメントカジノ、カジノバー、カジノイベント運営会社など、大会運営の効率化を求めるすべての店舗にご利用いただけます。",
   },
   {
     question: "データの安全性は？",

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import {
-  Coins,
-  BarChart3,
-  ClipboardCheck,
+  Trophy,
+  UserPlus,
   LayoutGrid,
+  Award,
   ChevronRight,
   Mail,
   MessageCircle,
@@ -15,17 +15,17 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { WaitingListForm } from "@/components/WaitingListForm";
 
 const ICON_MAP = {
-  Coins,
-  BarChart3,
-  ClipboardCheck,
+  Trophy,
+  UserPlus,
   LayoutGrid,
+  Award,
 } as const;
 
 const PROBLEMS = [
-  { emoji: "🎰", title: "チップ棚卸しに毎日1時間以上", description: "閉店後に手作業でチップを数え、Excelに入力。ミスがあると翌日に持ち越し。" },
-  { emoji: "📊", title: "売上の全体像がつかめない", description: "チップ購入・ドリンク・参加費の記録がバラバラで、正確な売上を出すのに時間がかかる。" },
-  { emoji: "🃏", title: "テーブル稼働が見えない", description: "どのテーブルが空いているか、ディーラーの配置が適切かを感覚で判断している。" },
-  { emoji: "🏆", title: "トーナメント集計でミス", description: "Excelでの順位集計・賞金配分のミスがクレームにつながることがある。" },
+  { emoji: "🏆", title: "トーナメントの順位集計がExcel頼み", description: "大会のたびにExcelで手入力。計算ミスで順位が変わるとクレームに直結する。" },
+  { emoji: "📋", title: "参加者の受付・チェックインが混乱", description: "当日の参加人数変動、レイトレジスト対応…紙とLINEで回すのに限界を感じている。" },
+  { emoji: "🃏", title: "テーブル割り当てに毎回悩む", description: "参加人数に応じたテーブル配置・移動を頭の中で計算。大会が大きくなるほどパンクする。" },
+  { emoji: "💰", title: "賞金・ポイント配分で揉める", description: "配分ルールがあいまいだったり、計算が合わなかったり。参加者からの信頼に関わる問題。" },
 ];
 
 export default function HomePage() {
@@ -52,17 +52,17 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black leading-[1.1] mb-6 tracking-tight text-white">
-            カジノ運営を、
+            トーナメント運営を、
             <br />
             <span className="bg-gradient-to-r from-ch-primary-light via-ch-accent-light to-ch-primary-light bg-[length:200%_auto] bg-clip-text text-transparent animate-[shimmer_4s_linear_infinite]">
-              もっと自由に。
+              もっとスマートに。
             </span>
           </h1>
 
           <p className="text-white/60 text-lg md:text-xl mb-10 max-w-lg mx-auto leading-relaxed">
-            チップ管理、売上分析、テーブル運営。
+            エントリー、テーブル割当、順位集計。
             <br />
-            すべてを一つのクラウドで。
+            面倒な作業をまとめてクラウドへ。
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -125,7 +125,7 @@ export default function HomePage() {
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-ch-text">
             Casinohubでできること
           </h2>
-          <p className="text-center text-ch-text-muted mb-14 text-sm">まずはチップ管理と売上分析から。段階的に機能を拡張します。</p>
+          <p className="text-center text-ch-text-muted mb-14 text-sm">トーナメント運営に必要な機能を、ひとつのツールに。</p>
           <div className="space-y-6">
             {FEATURES.map((f, i) => {
               const Icon = ICON_MAP[f.icon];

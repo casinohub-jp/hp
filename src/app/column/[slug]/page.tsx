@@ -31,7 +31,7 @@ export default async function ArticlePage({ params }: Props) {
       <article className="mx-auto max-w-3xl">
         <Link
           href="/column"
-          className="inline-flex items-center gap-1 text-sm text-ch-text-muted hover:text-ch-primary mb-6 transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-ch-text-muted hover:text-ch-gold mb-6 transition-colors"
         >
           <ArrowLeft size={14} />
           コラム一覧へ
@@ -47,7 +47,7 @@ export default async function ArticlePage({ params }: Props) {
             {article.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-xs px-2.5 py-1 rounded bg-ch-surface-alt border border-ch-border text-ch-primary-dark"
+                className="text-xs px-2.5 py-1 rounded bg-ch-surface-alt border border-ch-border text-ch-gold-dark"
               >
                 {tag}
               </span>

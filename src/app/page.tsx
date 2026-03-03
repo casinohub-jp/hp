@@ -51,22 +51,22 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative pt-28 pb-20 px-4 bg-gradient-to-br from-ch-hero-from to-ch-hero-to overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(108,43,217,0.3),transparent_60%)]" />
+      <section className="relative pt-28 pb-20 px-4 bg-gradient-to-br from-ch-bg to-ch-surface overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(212,168,67,0.15),transparent_60%)]" />
         <div className="relative mx-auto max-w-3xl text-center animate-fade-in">
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4 text-white">
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4 text-ch-text">
             アミューズメントカジノの
             <br />
-            店舗管理を、<span className="text-ch-accent">ひとつに。</span>
+            店舗管理を、<span className="text-ch-gold">ひとつに。</span>
           </h1>
-          <p className="text-indigo-200 text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-ch-text-secondary text-lg mb-8 max-w-xl mx-auto">
             チップ管理・売上分析・棚卸し・テーブル管理をまとめてデジタル化。
             <br className="hidden md:block" />
             現場の「めんどくさい」を減らすクラウドサービスです。
           </p>
           <a
             href="#waitlist"
-            className="inline-flex items-center gap-2 bg-ch-accent hover:bg-ch-accent-light text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-ch-gold to-ch-gold-light hover:from-ch-gold-light hover:to-ch-gold text-ch-bg font-semibold px-6 py-3 rounded-xl transition-all"
           >
             <Mail size={18} />
             事前登録する（無料）
@@ -74,7 +74,7 @@ export default function HomePage() {
           <div className="mt-4">
             <a
               href="#features"
-              className="text-indigo-300 text-sm hover:text-white transition-colors inline-flex items-center gap-1"
+              className="text-ch-text-muted text-sm hover:text-ch-gold transition-colors inline-flex items-center gap-1"
             >
               機能を見る <ChevronDown size={14} />
             </a>
@@ -86,7 +86,7 @@ export default function HomePage() {
       <section className="py-16 px-4 bg-ch-surface-alt">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 text-ch-primary mb-3">
+            <div className="inline-flex items-center gap-2 text-ch-gold mb-3">
               <AlertTriangle size={18} />
               <span className="text-sm font-semibold">こんな課題ありませんか？</span>
             </div>
@@ -98,7 +98,7 @@ export default function HomePage() {
             {PROBLEMS.map((p) => (
               <div
                 key={p.title}
-                className="bg-ch-surface border-l-4 border-ch-primary rounded-xl p-5 shadow-sm"
+                className="bg-ch-surface border-l-4 border-ch-gold rounded-xl p-5 shadow-sm"
               >
                 <h3 className="font-semibold mb-1 text-ch-text">{p.title}</h3>
                 <p className="text-sm text-ch-text-secondary">
@@ -122,11 +122,11 @@ export default function HomePage() {
               return (
                 <div
                   key={f.title}
-                  className="bg-ch-surface border border-ch-border rounded-xl p-6 hover:shadow-lg hover:border-ch-primary/30 transition-all"
+                  className="bg-ch-surface border border-ch-border rounded-xl p-6 hover:shadow-lg hover:border-ch-gold/30 transition-all"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-ch-primary/10 flex items-center justify-center">
-                      <Icon size={20} className="text-ch-primary" />
+                    <div className="w-10 h-10 rounded-lg bg-ch-gold/10 flex items-center justify-center">
+                      <Icon size={20} className="text-ch-gold" />
                     </div>
                     <h3 className="font-semibold text-ch-text">{f.title}</h3>
                   </div>
@@ -141,14 +141,14 @@ export default function HomePage() {
       </section>
 
       {/* Waiting List */}
-      <section id="waitlist" className="py-16 px-4 bg-gradient-to-br from-ch-primary-dark to-ch-hero-from">
+      <section id="waitlist" className="py-16 px-4 bg-gradient-to-br from-ch-surface-alt to-ch-bg">
         <div className="mx-auto max-w-lg text-center">
-          <h2 className="text-2xl font-bold mb-3 text-white">事前登録</h2>
-          <p className="text-indigo-200 mb-6">
+          <h2 className="text-2xl font-bold mb-3 text-ch-text">事前登録</h2>
+          <p className="text-ch-text-secondary mb-6">
             βテストの準備が整い次第、ご案内いたします。
           </p>
           <WaitingListForm />
-          <p className="text-xs text-indigo-300 mt-3">
+          <p className="text-xs text-ch-text-muted mt-3">
             ※ 登録は無料です。スパムメールは送りません。
           </p>
         </div>
@@ -158,7 +158,7 @@ export default function HomePage() {
       <section id="vision" className="py-16 px-4 bg-ch-surface-alt">
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 text-ch-primary mb-3">
+            <div className="inline-flex items-center gap-2 text-ch-gold mb-3">
               <Lightbulb size={18} />
               <span className="text-sm font-semibold">開発中のサービス</span>
             </div>
@@ -181,17 +181,17 @@ export default function HomePage() {
                 { label: "複数店舗の一元管理ダッシュボード", done: false },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full shrink-0 ${item.done ? "bg-ch-accent" : "bg-ch-border-hover"}`} />
+                  <div className={`w-2 h-2 rounded-full shrink-0 ${item.done ? "bg-ch-green" : "bg-ch-border-hover"}`} />
                   <span className={`text-sm ${item.done ? "text-ch-text" : "text-ch-text-muted"}`}>
                     {item.label}
-                    {!item.done && <span className="ml-2 text-xs text-ch-primary">(検討中)</span>}
+                    {!item.done && <span className="ml-2 text-xs text-ch-gold">(検討中)</span>}
                   </span>
                 </div>
               ))}
             </div>
-            <div className="mt-8 rounded-xl bg-ch-primary/5 border border-ch-primary/20 p-5">
+            <div className="mt-8 rounded-xl bg-ch-gold/5 border border-ch-gold/20 p-5">
               <div className="flex items-start gap-3">
-                <MessageCircle size={20} className="text-ch-primary shrink-0 mt-0.5" />
+                <MessageCircle size={20} className="text-ch-gold shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-semibold text-ch-text">
                     現場の声を聞かせてください
@@ -202,7 +202,7 @@ export default function HomePage() {
                   </p>
                   <a
                     href="#waitlist"
-                    className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-ch-primary hover:text-ch-primary-light transition-colors"
+                    className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-ch-gold hover:text-ch-gold-light transition-colors"
                   >
                     事前登録してフィードバックを送る →
                   </a>
@@ -254,7 +254,7 @@ export default function HomePage() {
             <div className="text-center mt-6">
               <Link
                 href="/column"
-                className="text-sm text-ch-primary hover:text-ch-primary-light transition-colors"
+                className="text-sm text-ch-gold hover:text-ch-gold-light transition-colors"
               >
                 すべての記事を見る →
               </Link>

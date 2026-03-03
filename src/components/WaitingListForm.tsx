@@ -9,12 +9,12 @@ export function WaitingListForm() {
       <input
         type="email"
         placeholder="メールアドレス"
-        className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-indigo-300 focus:outline-none focus:border-ch-accent focus:ring-2 focus:ring-ch-accent/30"
+        className="flex-1 px-4 py-3 rounded-lg bg-ch-bg border border-ch-border text-ch-text placeholder:text-ch-text-muted focus:outline-none focus:border-ch-gold focus:ring-1 focus:ring-ch-gold/30"
         required
       />
       <button
         type="submit"
-        className="bg-ch-accent hover:bg-ch-accent-light text-white font-semibold px-6 py-3 rounded-xl transition-colors whitespace-nowrap"
+        className="bg-gradient-to-r from-ch-gold to-ch-gold-light hover:from-ch-gold-light hover:to-ch-gold text-ch-bg font-semibold px-6 py-3 rounded-lg transition-all whitespace-nowrap"
       >
         登録する
       </button>

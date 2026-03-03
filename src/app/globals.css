@@ -1,20 +1,22 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-ch-bg: #070b1e;
-  --color-ch-surface: #0f1535;
-  --color-ch-surface-alt: #161d45;
-  --color-ch-gold: #d4a843;
-  --color-ch-gold-light: #e8c468;
-  --color-ch-gold-dark: #b08930;
-  --color-ch-green: #1a8b4b;
-  --color-ch-green-light: #22b35e;
-  --color-ch-red: #dc2626;
-  --color-ch-border: #1e2650;
-  --color-ch-border-hover: #2a3568;
-  --color-ch-text: #f0f0f8;
-  --color-ch-text-secondary: #8a8eb0;
-  --color-ch-text-muted: #5a5e80;
+  /* Casino Dreams — ディープパープル × ネオンマゼンタ × シアン */
+  --color-ch-bg: #0d0a1a;
+  --color-ch-surface: #1a1333;
+  --color-ch-surface-alt: #231a40;
+  --color-ch-primary: #e040fb;
+  --color-ch-primary-light: #f06aff;
+  --color-ch-primary-dark: #b030d0;
+  --color-ch-accent: #22d3ee;
+  --color-ch-accent-light: #67e8f9;
+  --color-ch-green: #34d399;
+  --color-ch-red: #f43f5e;
+  --color-ch-border: #2d2250;
+  --color-ch-border-hover: #3d3270;
+  --color-ch-text: #f5f0ff;
+  --color-ch-text-secondary: #a8a0c8;
+  --color-ch-text-muted: #6e6890;
 }
 
 body {
@@ -31,6 +33,16 @@ body {
   animation: fade-in 0.6s ease-out both;
 }
 
+/* ヒーローのグロー演出 */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+.animate-glow {
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+
 .prose-ch h1 {
   font-size: 1.75rem;
   font-weight: 700;
@@ -43,7 +55,7 @@ body {
   font-weight: 700;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
-  color: var(--color-ch-gold);
+  color: var(--color-ch-primary);
   border-bottom: 1px solid var(--color-ch-border);
   padding-bottom: 0.5rem;
 }
@@ -74,19 +86,19 @@ body {
 }
 
 .prose-ch strong {
-  color: var(--color-ch-gold);
+  color: var(--color-ch-primary);
   font-weight: 600;
 }
 
 .prose-ch blockquote {
-  border-left: 3px solid var(--color-ch-gold-dark);
+  border-left: 3px solid var(--color-ch-primary-dark);
   padding-left: 1rem;
   margin: 1.5rem 0;
   color: var(--color-ch-text-muted);
 }
 
 .prose-ch a {
-  color: var(--color-ch-gold);
+  color: var(--color-ch-accent);
   text-decoration: underline;
 }
 

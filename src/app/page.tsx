@@ -51,30 +51,36 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative pt-28 pb-20 px-4 bg-gradient-to-br from-ch-bg to-ch-surface overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(212,168,67,0.15),transparent_60%)]" />
+      <section className="relative pt-28 pb-24 px-4 overflow-hidden bg-ch-bg">
+        {/* ネオングロー演出 */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(224,64,251,0.15),transparent_60%)] animate-glow" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(34,211,238,0.1),transparent_60%)] animate-glow" style={{ animationDelay: "2s" }} />
         <div className="relative mx-auto max-w-3xl text-center animate-fade-in">
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4 text-ch-text">
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-ch-primary/30 bg-ch-primary/5">
+            <span className="w-2 h-2 rounded-full bg-ch-primary animate-pulse" />
+            <span className="text-xs font-medium text-ch-primary-light">開発中 — 事前登録受付中</span>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-5 text-ch-text">
             アミューズメントカジノの
             <br />
-            店舗管理を、<span className="text-ch-gold">ひとつに。</span>
+            店舗管理を、<span className="text-ch-primary">ひとつに。</span>
           </h1>
-          <p className="text-ch-text-secondary text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-ch-text-secondary text-lg mb-8 max-w-xl mx-auto leading-relaxed">
             チップ管理・売上分析・棚卸し・テーブル管理をまとめてデジタル化。
             <br className="hidden md:block" />
             現場の「めんどくさい」を減らすクラウドサービスです。
           </p>
           <a
             href="#waitlist"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-ch-gold to-ch-gold-light hover:from-ch-gold-light hover:to-ch-gold text-ch-bg font-semibold px-6 py-3 rounded-xl transition-all"
+            className="inline-flex items-center gap-2 bg-ch-primary hover:bg-ch-primary-light text-white font-semibold px-7 py-3.5 rounded-xl transition-colors shadow-lg shadow-ch-primary/25"
           >
             <Mail size={18} />
             事前登録する（無料）
           </a>
-          <div className="mt-4">
+          <div className="mt-5">
             <a
               href="#features"
-              className="text-ch-text-muted text-sm hover:text-ch-gold transition-colors inline-flex items-center gap-1"
+              className="text-ch-text-muted text-sm hover:text-ch-accent transition-colors inline-flex items-center gap-1"
             >
               機能を見る <ChevronDown size={14} />
             </a>

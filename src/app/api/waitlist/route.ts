@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await resend.emails.send({
+    const { data, error: sendError } = await resend.emails.send({
       from: "Casinohub <noreply@casinohub.jp>",
       replyTo: "contact@casinohub.jp",
       to: [email],
@@ -45,7 +45,12 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ success: true });
+    if (sendError) {
+      console.error("Resendエラー:", sendError);
+      return NextResponse.json({ error: sendError.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, id: data?.id });
   } catch (error) {
     console.error("事前登録メール送信エラー:", error);
     const message =

@@ -8,8 +8,6 @@ import {
   Mail,
   MessageCircle,
   Sparkles,
-  Check,
-  Circle,
 } from "lucide-react";
 import { FEATURES, FAQ_ITEMS } from "@/lib/constants";
 import { getAllArticles } from "@/lib/media";
@@ -175,37 +173,48 @@ export default function HomePage() {
         <span className="suit-deco-light top-[8%] right-[6%] animate-float" style={{ animationDelay: "2s" }}>♣</span>
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12">
-            <p className="text-ch-accent font-bold text-sm tracking-widest uppercase mb-3">Roadmap</p>
+            <p className="text-ch-accent font-bold text-sm tracking-widest uppercase mb-3">What we&apos;re building</p>
             <h2 className="text-2xl md:text-3xl font-bold text-ch-text">
-              こんなSaaSを作っています
+              こんなSaaSを考えています
             </h2>
             <p className="mt-3 text-ch-text-secondary max-w-xl mx-auto">
               アミューズメントカジノ業界に特化した管理ツールは、まだほとんど存在しません。
-              現場の声をもとに、本当に必要な機能を開発しています。
+              まずはトーナメント管理を軸に開発を始めていますが、
+              正直なところ、現場で本当に必要な機能はまだ手探りです。
             </p>
           </div>
-          {/* タイムライン */}
-          <div className="relative pl-8 border-l-2 border-ch-border space-y-6">
-            {[
-              { label: "チップの購入・払出・回収をリアルタイムに記録", done: true },
-              { label: "日次・月次の売上レポートを自動生成", done: true },
-              { label: "テーブル別のチップ棚卸し＆差異チェック", done: true },
-              { label: "テーブル稼働率・ディーラー配置の可視化", done: false },
-              { label: "トーナメント管理（参加者・順位・賞金配分）", done: false },
-              { label: "複数店舗の一元管理ダッシュボード", done: false },
-            ].map((item) => (
-              <div key={item.label} className="relative">
-                <div className={`absolute -left-[calc(1rem+5px)] top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${item.done ? "bg-ch-green text-white" : "bg-ch-border"}`}>
-                  {item.done ? <Check size={12} /> : <Circle size={10} className="text-ch-text-muted" />}
-                </div>
-                <div className={`bg-white rounded-xl p-4 border border-ch-border ${item.done ? "" : "opacity-60"}`}>
-                  <span className="text-sm text-ch-text">
-                    {item.label}
-                  </span>
-                  {!item.done && <span className="ml-2 text-xs text-ch-primary font-medium">(検討中)</span>}
-                </div>
+          {/* 機能候補 */}
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl p-5 border-2 border-ch-primary/30">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-xs font-bold text-white bg-ch-primary px-2.5 py-0.5 rounded-full">メイン</span>
+                <h3 className="font-bold text-ch-text">トーナメント管理</h3>
               </div>
-            ))}
+              <p className="text-sm text-ch-text-secondary leading-relaxed">
+                参加者登録・テーブル割当・順位集計・賞金配分をまとめて管理。
+                Excel集計のミスやトラブルをなくします。
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-5 border border-ch-border">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-xs font-bold text-ch-accent bg-ch-accent/10 px-2.5 py-0.5 rounded-full">検討中</span>
+                <h3 className="font-bold text-ch-text">チップ管理・棚卸し</h3>
+              </div>
+              <p className="text-sm text-ch-text-secondary leading-relaxed">
+                チップの購入・払出・回収の記録やテーブル別の棚卸し。
+                そもそもニーズがあるのか、現場の方に聞いてみたいところです。
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-5 border border-ch-border">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-xs font-bold text-ch-accent bg-ch-accent/10 px-2.5 py-0.5 rounded-full">検討中</span>
+                <h3 className="font-bold text-ch-text">売上レポート・テーブル稼働分析</h3>
+              </div>
+              <p className="text-sm text-ch-text-secondary leading-relaxed">
+                日次・月次のレポート自動生成やテーブルの稼働率可視化。
+                どこまでの粒度が必要なのか、ぜひ教えていただけると助かります。
+              </p>
+            </div>
           </div>
           {/* フィードバックCTA */}
           <div className="mt-10 bg-gradient-to-r from-ch-primary/5 to-ch-accent/5 rounded-2xl p-6 border border-ch-primary/15">
@@ -214,10 +223,11 @@ export default function HomePage() {
                 <MessageCircle size={20} className="text-ch-primary" />
               </div>
               <div>
-                <p className="font-bold text-ch-text">現場の声を聞かせてください</p>
+                <p className="font-bold text-ch-text">一緒に作りませんか？</p>
                 <p className="mt-1 text-sm text-ch-text-secondary">
-                  「こんな機能がほしい」「ここが困っている」など、ぜひ教えてください。
-                  開発の優先順位に直接反映させていただきます。
+                  「うちではこう管理してる」「これがあったら絶対使う」「それは要らない」——
+                  どんな声でも開発の方向性に直接反映します。
+                  アミューズメントカジノの運営に関わる方、ぜひ気軽に教えてください。
                 </p>
                 <a
                   href="#waitlist"

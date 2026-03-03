@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ch-bg: #0e1225;
+  --color-ch-surface: #1a2040;
+  --color-ch-surface-hover: #222850;
+  --color-ch-green: #2d8a4e;
+  --color-ch-green-light: #38a85e;
+  --color-ch-gold: #c9a456;
+  --color-ch-gold-light: #dbb96a;
+  --color-ch-border: #2a3060;
+  --color-ch-text: #e8e8f0;
+  --color-ch-text-secondary: #9a9abb;
+  --color-ch-text-muted: #6a6a8a;
+}
+
+body {
+  background-color: var(--color-ch-bg);
+  color: var(--color-ch-text);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+
+.prose-ch h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--color-ch-text);
+}
+
+.prose-ch h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-ch-text);
+  border-bottom: 1px solid var(--color-ch-border);
+  padding-bottom: 0.5rem;
+}
+
+.prose-ch h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-ch-text);
+}
+
+.prose-ch p {
+  margin-bottom: 1.25rem;
+  line-height: 1.85;
+  color: var(--color-ch-text-secondary);
+}
+
+.prose-ch ul, .prose-ch ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+  color: var(--color-ch-text-secondary);
+}
+
+.prose-ch li {
+  margin-bottom: 0.5rem;
+  line-height: 1.75;
+}
+
+.prose-ch strong {
+  color: var(--color-ch-gold);
+  font-weight: 600;
+}
+
+.prose-ch blockquote {
+  border-left: 3px solid var(--color-ch-green);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--color-ch-text-muted);
+}
+
+.prose-ch a {
+  color: var(--color-ch-green-light);
+  text-decoration: underline;
+}
+
+.prose-ch table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+}
+
+.prose-ch th, .prose-ch td {
+  border: 1px solid var(--color-ch-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  color: var(--color-ch-text-secondary);
+}
+
+.prose-ch th {
+  background: var(--color-ch-surface);
+  color: var(--color-ch-text);
+  font-weight: 600;
+}

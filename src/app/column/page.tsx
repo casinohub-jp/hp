@@ -14,10 +14,12 @@ export default function ColumnPage() {
   return (
     <section className="pt-24 pb-16 px-4">
       <div className="mx-auto max-w-4xl">
-        <h1 className="text-2xl font-bold mb-2">コラム</h1>
-        <p className="text-ch-text-secondary mb-8">
-          アミューズメントカジノの開業・運営に役立つ情報をお届けします。
-        </p>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-ch-text mb-2">コラム</h1>
+          <p className="text-ch-text-secondary">
+            アミューズメントカジノの開業・運営に役立つ情報をお届けします。
+          </p>
+        </div>
         {articles.length === 0 ? (
           <p className="text-ch-text-muted">記事はまだありません。</p>
         ) : (

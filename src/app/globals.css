@@ -1,17 +1,21 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-ch-bg: #0e1225;
-  --color-ch-surface: #1a2040;
-  --color-ch-surface-hover: #222850;
-  --color-ch-green: #2d8a4e;
-  --color-ch-green-light: #38a85e;
-  --color-ch-gold: #c9a456;
-  --color-ch-gold-light: #dbb96a;
-  --color-ch-border: #2a3060;
-  --color-ch-text: #e8e8f0;
-  --color-ch-text-secondary: #9a9abb;
-  --color-ch-text-muted: #6a6a8a;
+  --color-ch-bg: #fafbff;
+  --color-ch-surface: #ffffff;
+  --color-ch-surface-alt: #f0f1fa;
+  --color-ch-hero-from: #1e1145;
+  --color-ch-hero-to: #0f172a;
+  --color-ch-primary: #6c2bd9;
+  --color-ch-primary-light: #7e3ff2;
+  --color-ch-primary-dark: #5521a6;
+  --color-ch-accent: #06b6d4;
+  --color-ch-accent-light: #22d3ee;
+  --color-ch-border: #e2e5f1;
+  --color-ch-border-hover: #c5c9e0;
+  --color-ch-text: #1e1b4b;
+  --color-ch-text-secondary: #64648b;
+  --color-ch-text-muted: #9a9abb;
 }
 
 body {
@@ -71,19 +75,19 @@ body {
 }
 
 .prose-ch strong {
-  color: var(--color-ch-gold);
+  color: var(--color-ch-primary);
   font-weight: 600;
 }
 
 .prose-ch blockquote {
-  border-left: 3px solid var(--color-ch-green);
+  border-left: 3px solid var(--color-ch-primary);
   padding-left: 1rem;
   margin: 1.5rem 0;
   color: var(--color-ch-text-muted);
 }
 
 .prose-ch a {
-  color: var(--color-ch-green-light);
+  color: var(--color-ch-primary);
   text-decoration: underline;
 }
 
@@ -101,7 +105,7 @@ body {
 }
 
 .prose-ch th {
-  background: var(--color-ch-surface);
+  background: var(--color-ch-surface-alt);
   color: var(--color-ch-text);
   font-weight: 600;
 }

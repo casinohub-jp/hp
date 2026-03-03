@@ -3,12 +3,14 @@ import { BRAND, NAV_ITEMS } from "@/lib/constants";
 
 export function Footer() {
   return (
-    <footer className="border-t border-ch-border bg-ch-surface">
-      <div className="mx-auto max-w-5xl px-4 py-10">
+    <footer className="bg-gradient-to-br from-ch-hero-from to-ch-hero-to text-white">
+      <div className="mx-auto max-w-5xl px-4 py-12">
         <div className="flex flex-col md:flex-row justify-between gap-6">
           <div>
-            <p className="text-lg font-bold text-ch-gold">{BRAND.name}</p>
-            <p className="text-sm text-ch-text-muted mt-1">
+            <p className="text-lg font-black bg-gradient-to-r from-ch-primary-light to-ch-accent-light bg-clip-text text-transparent">
+              {BRAND.name}
+            </p>
+            <p className="text-sm text-white/50 mt-1">
               {BRAND.description}
             </p>
           </div>
@@ -17,14 +19,14 @@ export function Footer() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm text-ch-text-secondary hover:text-ch-gold transition-colors"
+                className="text-sm text-white/60 hover:text-ch-primary-light transition-colors"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
         </div>
-        <p className="mt-8 text-xs text-ch-text-muted text-center">
+        <p className="mt-10 text-xs text-white/30 text-center">
           &copy; {new Date().getFullYear()} {BRAND.name}. All rights reserved.
         </p>
       </div>

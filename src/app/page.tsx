@@ -4,12 +4,12 @@ import {
   BarChart3,
   ClipboardCheck,
   LayoutGrid,
-  ChevronDown,
+  ChevronRight,
   Mail,
-  AlertTriangle,
-  Lightbulb,
   MessageCircle,
   Sparkles,
+  Check,
+  Circle,
 } from "lucide-react";
 import { FEATURES, FAQ_ITEMS } from "@/lib/constants";
 import { getAllArticles } from "@/lib/media";
@@ -24,30 +24,10 @@ const ICON_MAP = {
 } as const;
 
 const PROBLEMS = [
-  {
-    emoji: "🎰",
-    title: "チップ棚卸しに毎日1時間以上",
-    description:
-      "閉店後に手作業でチップを数え、Excelに入力。ミスがあると翌日に持ち越し。",
-  },
-  {
-    emoji: "📊",
-    title: "売上の全体像がつかめない",
-    description:
-      "チップ購入・ドリンク・参加費の記録がバラバラで、正確な売上を出すのに時間がかかる。",
-  },
-  {
-    emoji: "🃏",
-    title: "テーブル稼働が見えない",
-    description:
-      "どのテーブルが空いているか、ディーラーの配置が適切かを感覚で判断している。",
-  },
-  {
-    emoji: "🏆",
-    title: "トーナメント集計でミス",
-    description:
-      "Excelでの順位集計・賞金配分のミスがクレームにつながることがある。",
-  },
+  { emoji: "🎰", title: "チップ棚卸しに毎日1時間以上", description: "閉店後に手作業でチップを数え、Excelに入力。ミスがあると翌日に持ち越し。" },
+  { emoji: "📊", title: "売上の全体像がつかめない", description: "チップ購入・ドリンク・参加費の記録がバラバラで、正確な売上を出すのに時間がかかる。" },
+  { emoji: "🃏", title: "テーブル稼働が見えない", description: "どのテーブルが空いているか、ディーラーの配置が適切かを感覚で判断している。" },
+  { emoji: "🏆", title: "トーナメント集計でミス", description: "Excelでの順位集計・賞金配分のミスがクレームにつながることがある。" },
 ];
 
 export default function HomePage() {
@@ -55,89 +35,83 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ===== Hero ===== */}
-      <section className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
-        {/* 背景グロー */}
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(224,64,251,0.18),transparent_55%)] animate-glow" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(34,211,238,0.12),transparent_55%)] animate-glow" style={{ animationDelay: "2.5s" }} />
+      {/* ===== Hero（ダーク島） ===== */}
+      <section className="relative min-h-[92vh] flex items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-ch-hero-from via-[#1a0d3d] to-ch-hero-to">
+        {/* グロー */}
+        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(217,70,239,0.2),transparent_55%)] animate-glow" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(6,182,212,0.15),transparent_55%)] animate-glow" style={{ animationDelay: "2.5s" }} />
 
-        {/* カード柄デコレーション */}
+        {/* カード柄 */}
         <span className="suit-deco top-[15%] left-[8%] animate-float">♠</span>
-        <span className="suit-deco top-[20%] right-[10%] animate-float-reverse text-ch-primary/[0.04]" style={{ fontSize: "8rem", animationDelay: "1s" }}>♥</span>
+        <span className="suit-deco top-[18%] right-[10%] animate-float-reverse" style={{ fontSize: "8rem", animationDelay: "1s" }}>♥</span>
         <span className="suit-deco bottom-[15%] left-[15%] animate-float-reverse" style={{ animationDelay: "3s" }}>♦</span>
         <span className="suit-deco bottom-[20%] right-[8%] animate-float" style={{ fontSize: "5rem", animationDelay: "2s" }}>♣</span>
 
         <div className="relative mx-auto max-w-3xl text-center animate-fade-in">
-          {/* ステータスバッジ */}
-          <div className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full glass-card neon-border">
-            <Sparkles size={14} className="text-ch-accent" />
-            <span className="text-xs font-medium text-ch-text-secondary">
-              業界初 — アミューズメントカジノ特化SaaS
-            </span>
+          <div className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur">
+            <Sparkles size={14} className="text-ch-accent-light" />
+            <span className="text-xs font-medium text-white/70">業界初 — アミューズメントカジノ特化SaaS</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black leading-[1.1] mb-6 tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-black leading-[1.1] mb-6 tracking-tight text-white">
             カジノ運営を、
             <br />
-            <span className="bg-gradient-to-r from-ch-primary via-ch-accent to-ch-primary bg-[length:200%_auto] bg-clip-text text-transparent animate-[shimmer_4s_linear_infinite]">
+            <span className="bg-gradient-to-r from-ch-primary-light via-ch-accent-light to-ch-primary-light bg-[length:200%_auto] bg-clip-text text-transparent animate-[shimmer_4s_linear_infinite]">
               もっと自由に。
             </span>
           </h1>
 
-          <p className="text-ch-text-secondary text-lg md:text-xl mb-10 max-w-lg mx-auto leading-relaxed">
+          <p className="text-white/60 text-lg md:text-xl mb-10 max-w-lg mx-auto leading-relaxed">
             チップ管理、売上分析、テーブル運営。
             <br />
             すべてを一つのクラウドで。
           </p>
 
-          {/* CTA */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href="#waitlist"
-              className="group relative inline-flex items-center gap-2 btn-shimmer text-white font-bold px-8 py-4 rounded-2xl transition-all hover:scale-105 shadow-xl shadow-ch-primary/20"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-ch-primary to-ch-accent text-white font-bold px-8 py-4 rounded-2xl transition-all hover:scale-105 shadow-xl shadow-ch-primary/25"
             >
               <Mail size={18} />
               事前登録する（無料）
             </a>
             <a
               href="#features"
-              className="inline-flex items-center gap-2 text-ch-text-muted hover:text-ch-accent transition-colors text-sm"
+              className="inline-flex items-center gap-2 text-white/40 hover:text-ch-accent-light transition-colors text-sm"
             >
               機能を見る
-              <ChevronDown size={14} />
+              <ChevronRight size={14} />
             </a>
           </div>
         </div>
       </section>
 
-      {/* ===== Problems — 斜めセクション ===== */}
-      <section className="skew-top bg-ch-surface-alt py-20 px-4 relative">
-        <span className="suit-deco top-[10%] right-[5%] animate-float" style={{ fontSize: "4rem", animationDelay: "1s" }}>♠</span>
+      {/* ===== Problems — 横スクロール風ストリップ ===== */}
+      <section className="py-20 px-4 bg-ch-bg relative overflow-hidden">
+        <span className="suit-deco-light top-[10%] right-[5%] animate-float" style={{ animationDelay: "1s" }}>♠</span>
         <div className="mx-auto max-w-4xl">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 text-ch-accent mb-3">
-              <AlertTriangle size={18} />
-              <span className="text-sm font-semibold tracking-wide">こんな課題ありませんか？</span>
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-ch-text">
-              Excel・紙・LINEでの管理に
-              <span className="text-ch-primary">限界</span>を感じていたら
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-5">
-            {PROBLEMS.map((p) => (
+          <p className="text-center text-ch-primary font-bold text-sm tracking-widest uppercase mb-3">Problems</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-ch-text mb-12">
+            こんな課題、ありませんか？
+          </h2>
+          {/* 番号付き縦スタック — Lunaのグリッドカードとは全く違う */}
+          <div className="space-y-4">
+            {PROBLEMS.map((p, i) => (
               <div
                 key={p.title}
-                className="glass-card rounded-2xl p-6 transition-all group"
+                className="flex items-start gap-5 bg-white rounded-2xl p-6 border border-ch-border hover:border-ch-primary/30 hover:shadow-lg hover:shadow-ch-primary/5 transition-all group"
               >
-                <div className="flex items-start gap-4">
-                  <span className="text-3xl shrink-0 mt-0.5">{p.emoji}</span>
-                  <div>
-                    <h3 className="font-bold mb-1.5 text-ch-text group-hover:text-ch-primary transition-colors">{p.title}</h3>
-                    <p className="text-sm text-ch-text-secondary leading-relaxed">
-                      {p.description}
-                    </p>
+                <span className="text-4xl">{p.emoji}</span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="text-xs font-bold text-ch-primary bg-ch-primary/10 px-2 py-0.5 rounded-full">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-bold text-ch-text group-hover:text-ch-primary transition-colors">{p.title}</h3>
                   </div>
+                  <p className="text-sm text-ch-text-secondary leading-relaxed">
+                    {p.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -145,29 +119,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== Features — Bento風 ===== */}
-      <section id="features" className="py-20 px-4 relative">
-        <span className="suit-deco bottom-[5%] left-[3%] animate-float-reverse" style={{ fontSize: "5rem" }}>♦</span>
+      {/* ===== Features — 左右交互レイアウト ===== */}
+      <section id="features" className="py-20 px-4 bg-ch-surface-alt relative">
+        <span className="suit-deco-light bottom-[5%] left-[3%] animate-float-reverse">♦</span>
         <div className="mx-auto max-w-4xl">
+          <p className="text-center text-ch-accent font-bold text-sm tracking-widest uppercase mb-3">Features</p>
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-ch-text">
-            Casinohubで<span className="text-ch-accent">できること</span>
+            Casinohubでできること
           </h2>
-          <p className="text-center text-ch-text-muted mb-12 text-sm">まずはチップ管理と売上分析から。段階的に機能を拡張します。</p>
-          <div className="grid md:grid-cols-2 gap-5">
+          <p className="text-center text-ch-text-muted mb-14 text-sm">まずはチップ管理と売上分析から。段階的に機能を拡張します。</p>
+          <div className="space-y-6">
             {FEATURES.map((f, i) => {
               const Icon = ICON_MAP[f.icon];
+              const isEven = i % 2 === 0;
               return (
                 <div
                   key={f.title}
-                  className={`glass-card rounded-2xl p-7 transition-all group ${i === 0 ? "md:row-span-2" : ""}`}
+                  className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} items-center gap-6 bg-white rounded-3xl p-8 border border-ch-border hover:shadow-xl hover:shadow-ch-primary/5 transition-all group`}
                 >
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${i % 2 === 0 ? "from-ch-primary/20 to-ch-primary/5" : "from-ch-accent/20 to-ch-accent/5"} flex items-center justify-center mb-4`}>
-                    <Icon size={24} className={i % 2 === 0 ? "text-ch-primary" : "text-ch-accent"} />
+                  <div className={`shrink-0 w-20 h-20 rounded-2xl flex items-center justify-center ${isEven ? "bg-gradient-to-br from-ch-primary/15 to-ch-primary/5" : "bg-gradient-to-br from-ch-accent/15 to-ch-accent/5"}`}>
+                    <Icon size={36} className={isEven ? "text-ch-primary" : "text-ch-accent"} />
                   </div>
-                  <h3 className="text-lg font-bold text-ch-text mb-2 group-hover:text-ch-primary transition-colors">{f.title}</h3>
-                  <p className="text-sm text-ch-text-secondary leading-relaxed">
-                    {f.description}
-                  </p>
+                  <div className="text-center md:text-left">
+                    <h3 className="text-lg font-bold text-ch-text mb-2 group-hover:text-ch-primary transition-colors">{f.title}</h3>
+                    <p className="text-sm text-ch-text-secondary leading-relaxed">{f.description}</p>
+                  </div>
                 </div>
               );
             })}
@@ -175,106 +151,110 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== Waiting List ===== */}
-      <section id="waitlist" className="py-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-ch-surface-alt/50 to-ch-bg" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse,rgba(224,64,251,0.1),transparent_70%)]" />
+      {/* ===== Waiting List（ダーク島） ===== */}
+      <section id="waitlist" className="relative py-24 px-4 overflow-hidden bg-gradient-to-br from-ch-hero-from via-[#1a0d3d] to-ch-hero-to">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse,rgba(217,70,239,0.15),transparent_70%)]" />
+        <span className="suit-deco top-[10%] left-[5%] animate-float" style={{ fontSize: "4rem" }}>♥</span>
+        <span className="suit-deco bottom-[10%] right-[5%] animate-float-reverse" style={{ fontSize: "4rem", animationDelay: "2s" }}>♣</span>
         <div className="relative mx-auto max-w-md text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 text-ch-text">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 text-white">
             事前登録
           </h2>
-          <p className="text-ch-text-secondary mb-8">
+          <p className="text-white/60 mb-8">
             βテストの準備が整い次第、ご案内いたします。
           </p>
-          <div className="glass-card rounded-2xl p-6 neon-border">
-            <WaitingListForm />
-          </div>
-          <p className="text-xs text-ch-text-muted mt-4">
+          <WaitingListForm />
+          <p className="text-xs text-white/30 mt-4">
             ※ 登録は無料です。スパムメールは送りません。
           </p>
         </div>
       </section>
 
-      {/* ===== Vision — SaaS構想 ===== */}
-      <section id="vision" className="py-20 px-4 bg-ch-surface-alt relative">
-        <span className="suit-deco top-[8%] right-[6%] animate-float" style={{ fontSize: "5rem", animationDelay: "2s" }}>♣</span>
+      {/* ===== Vision — タイムラインレイアウト ===== */}
+      <section id="vision" className="py-20 px-4 bg-ch-bg relative">
+        <span className="suit-deco-light top-[8%] right-[6%] animate-float" style={{ animationDelay: "2s" }}>♣</span>
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 text-ch-accent mb-3">
-              <Lightbulb size={18} />
-              <span className="text-sm font-semibold">開発ロードマップ</span>
-            </div>
+            <p className="text-ch-accent font-bold text-sm tracking-widest uppercase mb-3">Roadmap</p>
             <h2 className="text-2xl md:text-3xl font-bold text-ch-text">
-              こんなSaaSを<span className="text-ch-primary">作っています</span>
+              こんなSaaSを作っています
             </h2>
             <p className="mt-3 text-ch-text-secondary max-w-xl mx-auto">
               アミューズメントカジノ業界に特化した管理ツールは、まだほとんど存在しません。
               現場の声をもとに、本当に必要な機能を開発しています。
             </p>
           </div>
-          <div className="glass-card rounded-2xl p-6 md:p-8">
-            <div className="space-y-5">
-              {[
-                { label: "チップの購入・払出・回収をリアルタイムに記録", done: true },
-                { label: "日次・月次の売上レポートを自動生成", done: true },
-                { label: "テーブル別のチップ棚卸し＆差異チェック", done: true },
-                { label: "テーブル稼働率・ディーラー配置の可視化", done: false },
-                { label: "トーナメント管理（参加者・順位・賞金配分）", done: false },
-                { label: "複数店舗の一元管理ダッシュボード", done: false },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center gap-4">
-                  <div className={`w-3 h-3 rounded-full shrink-0 ${item.done ? "bg-ch-green shadow-[0_0_8px_rgba(52,211,153,0.4)]" : "bg-ch-border-hover"}`} />
-                  <span className={`text-sm ${item.done ? "text-ch-text" : "text-ch-text-muted"}`}>
+          {/* タイムライン */}
+          <div className="relative pl-8 border-l-2 border-ch-border space-y-6">
+            {[
+              { label: "チップの購入・払出・回収をリアルタイムに記録", done: true },
+              { label: "日次・月次の売上レポートを自動生成", done: true },
+              { label: "テーブル別のチップ棚卸し＆差異チェック", done: true },
+              { label: "テーブル稼働率・ディーラー配置の可視化", done: false },
+              { label: "トーナメント管理（参加者・順位・賞金配分）", done: false },
+              { label: "複数店舗の一元管理ダッシュボード", done: false },
+            ].map((item) => (
+              <div key={item.label} className="relative">
+                <div className={`absolute -left-[calc(1rem+5px)] top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${item.done ? "bg-ch-green text-white" : "bg-ch-border"}`}>
+                  {item.done ? <Check size={12} /> : <Circle size={10} className="text-ch-text-muted" />}
+                </div>
+                <div className={`bg-white rounded-xl p-4 border border-ch-border ${item.done ? "" : "opacity-60"}`}>
+                  <span className="text-sm text-ch-text">
                     {item.label}
-                    {!item.done && <span className="ml-2 text-xs text-ch-primary">(検討中)</span>}
                   </span>
+                  {!item.done && <span className="ml-2 text-xs text-ch-primary font-medium">(検討中)</span>}
                 </div>
-              ))}
-            </div>
-            <div className="mt-8 rounded-2xl bg-ch-primary/5 border border-ch-primary/20 p-5">
-              <div className="flex items-start gap-3">
-                <MessageCircle size={20} className="text-ch-primary shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-bold text-ch-text">
-                    現場の声を聞かせてください
-                  </p>
-                  <p className="mt-1 text-sm text-ch-text-secondary">
-                    「こんな機能がほしい」「ここが困っている」など、ぜひ教えてください。
-                    開発の優先順位に直接反映させていただきます。
-                  </p>
-                  <a
-                    href="#waitlist"
-                    className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-ch-primary hover:text-ch-primary-light transition-colors"
-                  >
-                    事前登録してフィードバックを送る →
-                  </a>
-                </div>
+              </div>
+            ))}
+          </div>
+          {/* フィードバックCTA */}
+          <div className="mt-10 bg-gradient-to-r from-ch-primary/5 to-ch-accent/5 rounded-2xl p-6 border border-ch-primary/15">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl bg-ch-primary/10 flex items-center justify-center shrink-0">
+                <MessageCircle size={20} className="text-ch-primary" />
+              </div>
+              <div>
+                <p className="font-bold text-ch-text">現場の声を聞かせてください</p>
+                <p className="mt-1 text-sm text-ch-text-secondary">
+                  「こんな機能がほしい」「ここが困っている」など、ぜひ教えてください。
+                  開発の優先順位に直接反映させていただきます。
+                </p>
+                <a
+                  href="#waitlist"
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-ch-primary hover:text-ch-primary-dark transition-colors"
+                >
+                  事前登録してフィードバックを送る →
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===== FAQ ===== */}
-      <section id="faq" className="py-20 px-4">
+      {/* ===== FAQ — インライン展開（アコーディオンだが見た目が違う） ===== */}
+      <section id="faq" className="py-20 px-4 bg-ch-surface-alt">
         <div className="mx-auto max-w-3xl">
+          <p className="text-center text-ch-primary font-bold text-sm tracking-widest uppercase mb-3">FAQ</p>
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-ch-text">
             よくある質問
           </h2>
-          <div className="space-y-4">
-            {FAQ_ITEMS.map((item) => (
+          <div className="space-y-3">
+            {FAQ_ITEMS.map((item, i) => (
               <details
                 key={item.question}
-                className="glass-card rounded-2xl group"
+                className="bg-white rounded-2xl border border-ch-border group overflow-hidden"
               >
-                <summary className="flex items-center justify-between cursor-pointer p-6 font-bold text-ch-text list-none">
-                  {item.question}
-                  <ChevronDown
+                <summary className="flex items-center gap-4 cursor-pointer p-5 list-none">
+                  <span className="w-8 h-8 rounded-lg bg-ch-primary/10 text-ch-primary flex items-center justify-center text-xs font-bold shrink-0">
+                    Q{i + 1}
+                  </span>
+                  <span className="font-bold text-ch-text flex-1">{item.question}</span>
+                  <ChevronRight
                     size={16}
-                    className="text-ch-text-muted group-open:rotate-180 transition-transform"
+                    className="text-ch-text-muted group-open:rotate-90 transition-transform shrink-0"
                   />
                 </summary>
-                <div className="px-6 pb-6 text-sm text-ch-text-secondary leading-relaxed">
+                <div className="px-5 pb-5 pl-[4.25rem] text-sm text-ch-text-secondary leading-relaxed">
                   {item.answer}
                 </div>
               </details>
@@ -285,8 +265,9 @@ export default function HomePage() {
 
       {/* ===== Articles ===== */}
       {articles.length > 0 && (
-        <section className="py-20 px-4 bg-ch-surface-alt">
+        <section className="py-20 px-4 bg-ch-bg">
           <div className="mx-auto max-w-4xl">
+            <p className="text-center text-ch-accent font-bold text-sm tracking-widest uppercase mb-3">Column</p>
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-10 text-ch-text">コラム</h2>
             <div className="grid md:grid-cols-3 gap-5">
               {articles.map((a) => (
@@ -296,7 +277,7 @@ export default function HomePage() {
             <div className="text-center mt-8">
               <Link
                 href="/column"
-                className="text-sm text-ch-accent hover:text-ch-accent-light transition-colors font-medium"
+                className="text-sm text-ch-primary hover:text-ch-primary-dark transition-colors font-bold"
               >
                 すべての記事を見る →
               </Link>

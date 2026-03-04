@@ -24,6 +24,13 @@ export const metadata: Metadata = {
     siteName: "Casinohub",
     locale: "ja_JP",
     type: "website",
+    url: "https://casinohub.jp",
+  },
+  twitter: {
+    card: "summary",
+    title: "Casinohub | アミューズメントカジノ向け店舗管理SaaS",
+    description:
+      "アミューズメントカジノの店舗管理をひとつに。チップ管理・売上レポート・棚卸し・テーブル管理を一元化するクラウドサービス。",
   },
 };
 

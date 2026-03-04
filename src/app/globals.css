@@ -143,18 +143,48 @@ body {
 .prose-ch table {
   width: 100%;
   margin: 1.5rem 0;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--color-ch-border);
+  font-size: 0.9rem;
 }
 
 .prose-ch th, .prose-ch td {
-  border: 1px solid var(--color-ch-border);
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
   text-align: left;
   color: var(--color-ch-text-secondary);
+  border-bottom: 1px solid var(--color-ch-border);
+  line-height: 1.6;
 }
 
 .prose-ch th {
-  background: var(--color-ch-surface-alt);
-  color: var(--color-ch-text);
+  background: linear-gradient(135deg, #1a0533, #2a1050);
+  color: #fff;
   font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.prose-ch th + th,
+.prose-ch td + td {
+  border-left: 1px solid var(--color-ch-border);
+}
+
+.prose-ch th + th {
+  border-left-color: rgba(255, 255, 255, 0.15);
+}
+
+.prose-ch tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-ch tbody tr:nth-child(even) {
+  background: var(--color-ch-surface-alt);
+}
+
+.prose-ch tbody tr:hover {
+  background: #ece6ff;
+  transition: background 0.15s ease;
 }

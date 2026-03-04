@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { getArticle, getAllSlugs } from "@/lib/media";
 import { notFound } from "next/navigation";
 
@@ -56,7 +57,10 @@ export default async function ArticlePage({ params }: Props) {
             </div>
           )}
           <div className="prose-ch">
-            <MDXRemote source={article.content} />
+            <MDXRemote
+              source={article.content}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+            />
           </div>
         </div>
       </article>

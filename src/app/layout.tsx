@@ -15,11 +15,11 @@ const notoSansJP = Noto_Sans_JP({
 export const metadata: Metadata = {
   metadataBase: new URL("https://casinohub.jp"),
   title: {
-    default: "Casinohub | アミューズメントカジノ向け店舗管理SaaS",
+    default: "Casinohub | アミューズメントカジノ向けトーナメント管理SaaS",
     template: "%s | Casinohub",
   },
   description:
-    "アミューズメントカジノの店舗管理をひとつに。チップ管理・売上レポート・棚卸し・テーブル管理を一元化するクラウドサービス。",
+    "アミューズメントカジノのトーナメント運営をもっとスマートに。参加者登録・テーブル割当・順位集計・賞金配分をクラウドで一元管理。",
   openGraph: {
     siteName: "Casinohub",
     locale: "ja_JP",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Casinohub | アミューズメントカジノ向け店舗管理SaaS",
+    title: "Casinohub | アミューズメントカジノ向けトーナメント管理SaaS",
     description:
-      "アミューズメントカジノの店舗管理をひとつに。チップ管理・売上レポート・棚卸し・テーブル管理を一元化するクラウドサービス。",
+      "アミューズメントカジノのトーナメント運営をもっとスマートに。参加者登録・テーブル割当・順位集計・賞金配分をクラウドで一元管理。",
   },
 };
 

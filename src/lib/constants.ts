@@ -5,10 +5,8 @@ export const BRAND = {
 };
 
 export const NAV_ITEMS = [
-  { label: "機能", href: "/#features" },
-  { label: "構想", href: "/#vision" },
-  { label: "FAQ", href: "/#faq" },
   { label: "コラム", href: "/column" },
+  { label: "お問い合わせ", href: "/contact" },
 ];
 
 export const FEATURES = [

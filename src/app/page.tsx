@@ -73,13 +73,6 @@ export default function HomePage() {
               <Mail size={18} />
               事前登録する（無料）
             </a>
-            <a
-              href="#features"
-              className="inline-flex items-center gap-2 text-white/40 hover:text-ch-accent-light transition-colors text-sm"
-            >
-              機能を見る
-              <ChevronRight size={14} />
-            </a>
           </div>
         </div>
       </section>
@@ -118,7 +111,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== Features — 左右交互レイアウト ===== */}
-      <section id="features" className="py-20 px-4 bg-ch-surface-alt relative">
+      <section className="py-20 px-4 bg-ch-surface-alt relative">
         <span className="suit-deco-light bottom-[5%] left-[3%] animate-float-reverse">♦</span>
         <div className="mx-auto max-w-4xl">
           <p className="text-center text-ch-accent font-bold text-sm tracking-widest uppercase mb-3">Features</p>
@@ -169,7 +162,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== Vision — タイムラインレイアウト ===== */}
-      <section id="vision" className="py-20 px-4 bg-ch-bg relative">
+      <section className="py-20 px-4 bg-ch-bg relative">
         <span className="suit-deco-light top-[8%] right-[6%] animate-float" style={{ animationDelay: "2s" }}>♣</span>
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12">
@@ -229,12 +222,12 @@ export default function HomePage() {
                   どんな声でも開発の方向性に直接反映します。
                   アミューズメントカジノの運営に関わる方、ぜひ気軽に教えてください。
                 </p>
-                <a
-                  href="#waitlist"
+                <Link
+                  href="/contact"
                   className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-ch-primary hover:text-ch-primary-dark transition-colors"
                 >
-                  事前登録してフィードバックを送る →
-                </a>
+                  お問い合わせ →
+                </Link>
               </div>
             </div>
           </div>
@@ -242,7 +235,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== FAQ — インライン展開（アコーディオンだが見た目が違う） ===== */}
-      <section id="faq" className="py-20 px-4 bg-ch-surface-alt">
+      <section className="py-20 px-4 bg-ch-surface-alt">
         <div className="mx-auto max-w-3xl">
           <p className="text-center text-ch-primary font-bold text-sm tracking-widest uppercase mb-3">FAQ</p>
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-ch-text">

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createClient } from "@supabase/supabase-js";
 
 function getResend() {
   const key = process.env.RESEND_API_KEY;
@@ -48,6 +49,26 @@ export async function POST(request: NextRequest) {
     if (sendError) {
       console.error("Resendエラー:", sendError);
       return NextResponse.json({ error: sendError.message }, { status: 500 });
+    }
+
+    // inquiries保存（失敗してもメール送信の成功は返す）
+    try {
+      const supabase = createClient(
+        process.env.INQUIRY_SUPABASE_URL!,
+        process.env.INQUIRY_SUPABASE_ANON_KEY!,
+      );
+      await supabase.from("inquiries").insert({
+        project: "casinohub",
+        type: "waitlist",
+        name: null,
+        email,
+        company: null,
+        phone: null,
+        message: null,
+        metadata: {},
+      });
+    } catch {
+      console.error("inquiries insert失敗（メール送信は成功）");
     }
 
     return NextResponse.json({ success: true, id: data?.id });

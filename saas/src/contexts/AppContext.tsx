@@ -13,6 +13,7 @@ import {
 import { useToast } from '../components/Toast'
 import { useAuth } from './AuthContext'
 import { setTenantId } from '../lib/supabase'
+import { classifyError } from '../lib/errorHandler'
 
 const defaultState: AppState = {
   denominations: [],
@@ -115,13 +116,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       })
       .catch(err => {
         console.error('データ読み込みエラー:', err)
-        showToast('error', 'データの読み込みに失敗しました')
+        const classified = classifyError(err)
+        showToast('error', classified.message)
       })
       .finally(() => setLoading(false))
   }, [tenantId, showToast])
 
   // Supabaseへの同期（楽観的更新: UIは即座に反映、バックグラウンドでDB同期）
-  const syncToSupabase = useCallback(async (action: AppAction, currentState: AppState) => {
+  const syncToSupabase = useCallback(async (action: AppAction, previousState: AppState) => {
     try {
       switch (action.type) {
         case 'ADD_TRANSACTION':
@@ -137,7 +139,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           await updateTable(action.table)
           break
         case 'TOGGLE_TABLE': {
-          const table = currentState.tables.find(t => t.id === action.id)
+          const table = previousState.tables.find(t => t.id === action.id)
           if (table) await toggleTable(action.id, table.isOpen)
           break
         }
@@ -171,15 +173,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
     } catch (err) {
       console.error('Supabase同期エラー:', err)
-      const message = err instanceof Error ? err.message : '保存に失敗しました'
-      showToast('error', `同期エラー: ${message}`)
+      const classified = classifyError(err)
+      showToast('error', classified.message)
+      // 楽観的更新のロールバック: 変更前の状態を復元
+      rawDispatch({ type: 'LOAD_STATE', state: previousState })
+      showToast('warning', '変更を元に戻しました')
     }
   }, [showToast])
 
-  // 楽観的更新付きdispatch
+  // 楽観的更新付きdispatch（ロールバック対応）
   const dispatch = useCallback((action: AppAction) => {
+    // 変更前の状態を保持してから楽観的に更新
+    const previousState = state
     rawDispatch(action)
-    syncToSupabase(action, state)
+    syncToSupabase(action, previousState)
   }, [state, syncToSupabase])
 
   return (

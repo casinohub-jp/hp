@@ -1,25 +1,23 @@
 import { useState } from 'react'
-import { LayoutDashboard, Coins, ClipboardCheck, BarChart3, Settings, Trophy } from 'lucide-react'
+import { LayoutDashboard, BarChart3, Settings, Trophy, LogOut } from 'lucide-react'
 import DashboardTab from './DashboardTab'
-import ChipManagementTab from './ChipManagementTab'
-import InventoryTab from './InventoryTab'
 import ReportTab from './ReportTab'
 import SettingsTab from './SettingsTab'
 import TournamentTab from './TournamentTab'
+import { useAuth } from '../contexts/AuthContext'
 
-type Tab = 'dashboard' | 'chips' | 'inventory' | 'report' | 'tournament' | 'settings'
+type Tab = 'dashboard' | 'tournament' | 'report' | 'settings'
 
 const tabs: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'dashboard', label: 'ダッシュボード', icon: LayoutDashboard },
-  { id: 'chips', label: 'チップ管理', icon: Coins },
-  { id: 'inventory', label: '棚卸し', icon: ClipboardCheck },
-  { id: 'report', label: '売上レポート', icon: BarChart3 },
   { id: 'tournament', label: 'トーナメント', icon: Trophy },
+  { id: 'report', label: '売上レポート', icon: BarChart3 },
   { id: 'settings', label: '設定', icon: Settings },
 ]
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
+  const { logout, user } = useAuth()
 
   return (
     <div className="min-h-screen bg-[#0d1420] text-white">
@@ -30,7 +28,18 @@ export default function AdminPage() {
             C
           </div>
           <h1 className="text-lg font-bold tracking-wide">Casinohub</h1>
-          <span className="text-xs text-[#8090b0] ml-1">カジノ店舗管理</span>
+          <span className="text-xs text-[#8090b0] ml-1">トーナメント管理</span>
+          <div className="ml-auto flex items-center gap-3">
+            <span className="text-xs text-[#8090b0] hidden sm:inline">{user?.email}</span>
+            <button
+              onClick={logout}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-[#8090b0] hover:text-white hover:bg-[#2a3050] rounded-lg transition-colors"
+              title="ログアウト"
+            >
+              <LogOut size={14} />
+              <span className="hidden sm:inline">ログアウト</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -61,10 +70,8 @@ export default function AdminPage() {
       {/* コンテンツ */}
       <main className="max-w-6xl mx-auto p-4">
         {activeTab === 'dashboard' && <DashboardTab />}
-        {activeTab === 'chips' && <ChipManagementTab />}
-        {activeTab === 'inventory' && <InventoryTab />}
-        {activeTab === 'report' && <ReportTab />}
         {activeTab === 'tournament' && <TournamentTab />}
+        {activeTab === 'report' && <ReportTab />}
         {activeTab === 'settings' && <SettingsTab />}
       </main>
     </div>

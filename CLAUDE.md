@@ -32,9 +32,10 @@
 casinohub/
 ├── app/              ← 管理画面（Vite + React + TS + Tailwind v4）
 │   └── src/
-│       ├── contexts/AppContext.tsx   ← useReducer + localStorage 状態管理
-│       ├── data/mockData.ts         ← モックデータ・初期値
+│       ├── contexts/AppContext.tsx   ← useReducer + Supabase（楽観的更新）
+│       ├── data/mockData.ts         ← モックデータ（ID生成ユーティリティ）
 │       ├── lib/supabase.ts          ← Supabaseクライアント
+│       ├── lib/database.ts          ← Supabase CRUD操作
 │       ├── lib/csvExport.ts         ← CSV出力ユーティリティ
 │       ├── pages/AdminPage.tsx      ← メインレイアウト（4タブ構成）
 │       ├── pages/DashboardTab.tsx   ← ダッシュボード（トーナメント中心）
@@ -52,9 +53,9 @@ casinohub/
 ### 管理画面（app/）技術スタック
 - **フレームワーク**: Vite 7 + React 19 + TypeScript
 - **CSS**: Tailwind CSS v4（@tailwindcss/vite プラグイン）
-- **バックエンド**: Supabase（現在はlocalStorage + モックデータで動作）
+- **バックエンド**: Supabase（プロジェクト: xfqylwmirrfwpvsqwapa / ap-northeast-1）
 - **アイコン**: Lucide React
-- **状態管理**: useReducer + localStorage（クロスタブ同期対応）
+- **状態管理**: useReducer + Supabase（楽観的更新パターン）
 - **ポート**: 5176（dev server）
 
 ### 管理画面の機能
@@ -89,7 +90,7 @@ casinohub/
 ## 共通ルール
 
 - **言語**: 日本語で作業・出力
-- **金額**: 全て税込で記載
+- **金額**: 全て税込で記載し、表示時は「（税込）」を必ず付記する
 - **日付**: YYYY-MM-DD 形式
 - **コミットメッセージ**: 日本語、簡潔に
 - **秘密情報**: `.env`, credentials, API keyは絶対にコミットしない
@@ -107,6 +108,43 @@ casinohub/
 ### セルフレビュー工程（必須）
 全ての成果物を提出する前に、「ユーザーがさらに優秀になったバージョン」を模倣して一度レビュー・ブラッシュアップを行ってから提出すること。
 
+### Ralph Loop開発フロー（PRD駆動の自律開発）
+
+1. **PRD作成**: `PRD.md` にタスク一覧を作成
+2. **PRD深掘り**: 各タスクを実装・テスト・検証・エッジケースまで含めたサブタスクに分解
+3. **Ralph Loop実行**: PRDのタスクを上から順に消化。全タスクが `[x]` + 検証PASSまで止まらない
+4. **完了タスクは即座に `[x]` 更新** → コミット → 次へ
+
+### 進捗レポート出力（必須）
+
+長時間作業中は、ユーザーが非同期で確認できるように以下のフォーマットで出力する:
+
+**タスク完了時:**
+```
+[完了] Phase X > X.X タスク名
+- 実装内容: 概要
+- 検証結果: テスト結果 or ビルド結果
+- 確認URL: （デプロイがある場合）
+- 次のタスク: X.X タスク名
+```
+
+**ブロッカー発生時:**
+```
+[ブロック] Phase X > X.X タスク名
+- 原因: 詳細
+- 必要なアクション: ユーザーが何をすればいいか
+- スキップして次のタスクに進みます
+```
+
+**Phase完了時:**
+```
+[Phase完了] Phase X: フェーズ名
+- 完了: X/X タスク
+- ブロック: Xタスク（内容）
+- 確認URL: （あれば）
+- 次のアクション: Phase X に進む or ブロッカー解消？
+```
+
 ## ブランドカラー（仮）
 
 | 名前 | コード | 用途 |
@@ -117,7 +155,7 @@ casinohub/
 
 ## 事業情報
 
-- ステータス: Phase 1（MVP開発中 — UI実装済み、Supabase未接続）
+- ステータス: Phase 1（MVP開発中 — UI実装済み、Supabase接続済み、認証未実装）
 - ドメイン: 未取得
 - 法人/個人: zh（個人事業主）の事業として運営
 

@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
   Plus, Play, Pause, SkipForward, Square, Trophy, Users, Clock,
-  ChevronLeft, UserPlus, RefreshCw, Award, Trash2,
+  ChevronLeft, UserPlus, RefreshCw, Award, Trash2, LayoutGrid,
 } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 import { generateId } from '../data/mockData'
+import { distributePrizes } from '../lib/tournament-utils'
+import { assignPlayersToTables, type TableAssignment } from '../lib/table-assignment'
 import type { Tournament, BlindLevel, TournamentEntry, PrizeLevel, TournamentStatus } from '../types'
 
 // デフォルトのブラインド構造（20分レベル）
@@ -300,7 +302,8 @@ function CreateTournament({ onClose }: { onClose: () => void }) {
 // --- トーナメント詳細 ---
 function TournamentDetail({ tournament: t, onBack }: { tournament: Tournament; onBack: () => void }) {
   const { dispatch } = useApp()
-  const [subTab, setSubTab] = useState<'timer' | 'entries' | 'prizes'>('timer')
+  const [subTab, setSubTab] = useState<'timer' | 'entries' | 'tables' | 'prizes'>('timer')
+  const [tableAssignments, setTableAssignments] = useState<TableAssignment[]>([])
   const [newPlayerName, setNewPlayerName] = useState('')
 
   const update = useCallback((partial: Partial<Tournament>) => {
@@ -485,6 +488,7 @@ function TournamentDetail({ tournament: t, onBack }: { tournament: Tournament; o
         {[
           { id: 'timer' as const, label: 'タイマー', icon: Clock },
           { id: 'entries' as const, label: 'エントリー', icon: Users },
+          { id: 'tables' as const, label: 'テーブル', icon: LayoutGrid },
           { id: 'prizes' as const, label: '賞金', icon: Award },
         ].map(tab => (
           <button
@@ -593,6 +597,30 @@ function TournamentDetail({ tournament: t, onBack }: { tournament: Tournament; o
             </div>
           )}
         </div>
+      )}
+
+      {/* テーブル割当タブ */}
+      {subTab === 'tables' && (
+        <TableAssignmentPanel
+          tournament={t}
+          assignments={tableAssignments}
+          onAssign={(assignments) => {
+            setTableAssignments(assignments)
+            // エントリーにtableId/seatNumberを反映
+            const entryMap = new Map<string, { tableId: string; seatNumber: number }>()
+            for (const a of assignments) {
+              for (const e of a.entries) {
+                entryMap.set(e.id, { tableId: a.tableId, seatNumber: e.seatNumber ?? 0 })
+              }
+            }
+            const updatedEntries = t.entries.map(e => {
+              const assigned = entryMap.get(e.id)
+              if (assigned) return { ...e, tableId: assigned.tableId, seatNumber: assigned.seatNumber }
+              return e
+            })
+            update({ entries: updatedEntries })
+          }}
+        />
       )}
 
       {/* 賞金タブ */}
@@ -741,16 +769,90 @@ function BlindTimer({ tournament: t, onNextLevel }: { tournament: Tournament; on
   )
 }
 
-// --- 賞金配分ユーティリティ ---
-function distributePrizes(
-  entries: TournamentEntry[],
-  prizePool: number,
-  prizeStructure: PrizeLevel[],
-): TournamentEntry[] {
-  return entries.map(e => {
-    if (e.finishPosition == null) return e
-    const prize = prizeStructure.find(p => p.position === e.finishPosition)
-    if (!prize) return e
-    return { ...e, prizeAmount: Math.floor(prizePool * prize.percentage / 100) }
-  })
+// --- テーブル割当パネル ---
+function TableAssignmentPanel({
+  tournament: t,
+  assignments,
+  onAssign,
+}: {
+  tournament: Tournament
+  assignments: TableAssignment[]
+  onAssign: (assignments: TableAssignment[]) => void
+}) {
+  const { state } = useApp()
+  const [maxPerTable, setMaxPerTable] = useState(9)
+
+  const activeEntries = t.entries.filter(e => !e.eliminatedAt)
+  const availableTables = state.tables
+
+  const handleAssign = () => {
+    if (availableTables.length === 0 || activeEntries.length === 0) return
+    const result = assignPlayersToTables(t.entries, availableTables, maxPerTable)
+    onAssign(result)
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* 設定 */}
+      <div className="bg-[#121a2e] border border-[#2a3050] rounded-xl p-4 space-y-3">
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <label className="block text-sm text-[#8090b0] mb-1">テーブルあたり最大人数</label>
+            <input
+              type="number"
+              value={maxPerTable}
+              onChange={e => setMaxPerTable(Math.max(2, Number(e.target.value)))}
+              min={2}
+              max={12}
+              className="w-24 bg-[#0d1420] border border-[#2a3050] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#2d8a4e]"
+            />
+          </div>
+          <div className="text-sm text-[#8090b0]">
+            <div>参加中: {activeEntries.length}人</div>
+            <div>テーブル: {availableTables.length}卓</div>
+          </div>
+        </div>
+
+        <button
+          onClick={handleAssign}
+          disabled={availableTables.length === 0 || activeEntries.length === 0}
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#2d8a4e] hover:bg-[#247a42] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors"
+        >
+          <LayoutGrid size={16} />
+          テーブルを割り当てる
+        </button>
+
+        {availableTables.length === 0 && (
+          <p className="text-xs text-amber-400">
+            テーブルが登録されていません。設定タブからテーブルを追加してください。
+          </p>
+        )}
+      </div>
+
+      {/* 割当結果 */}
+      {assignments.length > 0 && (
+        <div className="space-y-3">
+          <h4 className="text-sm font-medium text-[#8090b0]">割当結果</h4>
+          {assignments.map(a => (
+            <div key={a.tableId} className="bg-[#121a2e] border border-[#2a3050] rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-[#2a3050] flex items-center justify-between">
+                <span className="font-medium">{a.tableName}</span>
+                <span className="text-xs text-[#8090b0]">{a.entries.length}人</span>
+              </div>
+              <div className="divide-y divide-[#2a3050]/30">
+                {a.entries.map(e => (
+                  <div key={e.id} className="px-4 py-2.5 flex items-center justify-between text-sm">
+                    <span>{e.playerName}</span>
+                    <span className="text-xs text-[#8090b0]">Seat {e.seatNumber}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
+
+// distributePrizes は src/lib/tournament-utils.ts に移動済み

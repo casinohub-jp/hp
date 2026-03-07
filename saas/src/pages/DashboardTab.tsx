@@ -1,81 +1,50 @@
-import { Coins, TrendingUp, Table2, Users, Trophy } from 'lucide-react'
+import { Trophy, Users, Calendar, Table2 } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 
 export default function DashboardTab() {
   const { state } = useApp()
-  const today = new Date().toISOString().split('T')[0]
 
-  // 今日の取引
-  const todayTransactions = state.transactions.filter(t => t.createdAt.startsWith(today))
-  const todayPurchases = todayTransactions.filter(t => t.type === 'purchase')
-  const todayChipSales = todayPurchases.reduce((sum, t) => sum + (t.cashAmount || 0), 0)
+  // トーナメント
+  const activeTournaments = state.tournaments.filter(t => t.status === 'running' || t.status === 'paused')
+  const upcomingTournaments = state.tournaments.filter(t => t.status === 'upcoming' || t.status === 'registering')
+  const completedTournaments = state.tournaments.filter(t => t.status === 'finished')
+  const totalEntries = state.tournaments.reduce((sum, t) => sum + t.entries.length, 0)
 
   // テーブル状況
   const openTables = state.tables.filter(t => t.isOpen).length
   const totalTables = state.tables.length
 
-  // 今日の売上
-  const todaySales = state.dailySales.find(s => s.date === today)
-
-  // 直近の取引（5件）
-  const recentTransactions = state.transactions.slice(0, 5)
-
-  // トーナメント
-  const activeTournaments = state.tournaments.filter(t => t.status === 'running' || t.status === 'paused')
-  const upcomingTournaments = state.tournaments.filter(t => t.status === 'upcoming' || t.status === 'registering')
-
-  const typeLabels: Record<string, string> = {
-    purchase: 'チップ購入',
-    return: 'チップ返却',
-    fill: 'フロート補充',
-    collect: 'チップ回収',
-  }
-
-  const typeColors: Record<string, string> = {
-    purchase: 'text-emerald-400',
-    return: 'text-blue-400',
-    fill: 'text-amber-400',
-    collect: 'text-purple-400',
-  }
-
   return (
     <div className="space-y-4">
       {/* サマリーカード */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <SummaryCard
-          icon={<Coins size={20} />}
-          label="本日チップ売上"
-          value={`¥${todayChipSales.toLocaleString()}`}
+          icon={<Trophy size={20} />}
+          label="開催中トーナメント"
+          value={activeTournaments.length > 0 ? `${activeTournaments.length}件` : 'なし'}
           color="text-emerald-400"
           bgColor="bg-emerald-900/20"
         />
         <SummaryCard
-          icon={<TrendingUp size={20} />}
-          label="本日売上合計"
-          value={`¥${(todaySales?.totalSales || todayChipSales).toLocaleString()}`}
-          color="text-[#c9a456]"
-          bgColor="bg-[#c9a456]/10"
-        />
-        <SummaryCard
-          icon={<Table2 size={20} />}
-          label="稼働テーブル"
-          value={`${openTables} / ${totalTables}`}
+          icon={<Calendar size={20} />}
+          label="予定トーナメント"
+          value={upcomingTournaments.length > 0 ? `${upcomingTournaments.length}件` : 'なし'}
           color="text-blue-400"
           bgColor="bg-blue-900/20"
         />
         <SummaryCard
           icon={<Users size={20} />}
-          label="本日取引数"
-          value={`${todayTransactions.length}件`}
-          color="text-purple-400"
-          bgColor="bg-purple-900/20"
-        />
-        <SummaryCard
-          icon={<Trophy size={20} />}
-          label="トーナメント"
-          value={activeTournaments.length > 0 ? `${activeTournaments.length}件 開催中` : upcomingTournaments.length > 0 ? `${upcomingTournaments.length}件 予定` : 'なし'}
+          label="累計参加者数"
+          value={`${totalEntries}人`}
           color="text-amber-400"
           bgColor="bg-amber-900/20"
+        />
+        <SummaryCard
+          icon={<Table2 size={20} />}
+          label="稼働テーブル"
+          value={`${openTables} / ${totalTables}`}
+          color="text-purple-400"
+          bgColor="bg-purple-900/20"
         />
       </div>
 
@@ -105,11 +74,13 @@ export default function DashboardTab() {
       </div>
 
       {/* トーナメント情報 */}
-      {(activeTournaments.length > 0 || upcomingTournaments.length > 0) && (
-        <div className="rounded-xl border border-[#2a3050] bg-[#121a2e] p-4">
-          <h2 className="text-sm font-bold text-[#8090b0] mb-3">トーナメント</h2>
+      <div className="rounded-xl border border-[#2a3050] bg-[#121a2e] p-4">
+        <h2 className="text-sm font-bold text-[#8090b0] mb-3">トーナメント</h2>
+        {[...activeTournaments, ...upcomingTournaments].length === 0 ? (
+          <p className="text-sm text-[#8090b0]">予定されているトーナメントはありません</p>
+        ) : (
           <div className="space-y-2">
-            {[...activeTournaments, ...upcomingTournaments].slice(0, 3).map(t => {
+            {[...activeTournaments, ...upcomingTournaments].slice(0, 5).map(t => {
               const statusLabel: Record<string, string> = {
                 upcoming: '予定',
                 registering: '受付中',
@@ -138,37 +109,26 @@ export default function DashboardTab() {
               )
             })}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* 直近の取引 */}
-      <div className="rounded-xl border border-[#2a3050] bg-[#121a2e] p-4">
-        <h2 className="text-sm font-bold text-[#8090b0] mb-3">直近の取引</h2>
-        {recentTransactions.length === 0 ? (
-          <p className="text-sm text-[#8090b0]">取引がありません</p>
-        ) : (
+      {/* 直近の完了トーナメント */}
+      {completedTournaments.length > 0 && (
+        <div className="rounded-xl border border-[#2a3050] bg-[#121a2e] p-4">
+          <h2 className="text-sm font-bold text-[#8090b0] mb-3">直近の完了トーナメント</h2>
           <div className="space-y-2">
-            {recentTransactions.map(tx => (
-              <div key={tx.id} className="flex items-center justify-between py-2 border-b border-[#2a3050] last:border-0">
-                <div className="flex items-center gap-3">
-                  <span className={`text-xs font-bold ${typeColors[tx.type]}`}>
-                    {typeLabels[tx.type]}
-                  </span>
-                  <span className="text-xs text-[#8090b0]">
-                    {new Date(tx.createdAt).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                  {tx.staffName && (
-                    <span className="text-xs text-[#8090b0]">{tx.staffName}</span>
-                  )}
+            {completedTournaments.slice(0, 5).map(t => (
+              <div key={t.id} className="flex items-center justify-between py-2 border-b border-[#2a3050] last:border-0">
+                <div>
+                  <span className="text-sm font-medium">{t.name}</span>
+                  <span className="text-xs text-[#8090b0] ml-2">{t.date}</span>
                 </div>
-                {tx.cashAmount != null && (
-                  <span className="text-sm font-bold">¥{tx.cashAmount.toLocaleString()}</span>
-                )}
+                <span className="text-xs text-[#8090b0]">{t.entries.length}人参加</span>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

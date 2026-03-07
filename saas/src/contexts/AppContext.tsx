@@ -1,22 +1,26 @@
-import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useEffect, useState, useCallback, type ReactNode } from 'react'
 import type { AppState, AppAction } from '../types'
 import {
-  initialDenominations,
-  initialTables,
-  initialStaff,
-  initialTransactions,
-  initialDailySales,
-} from '../data/mockData'
-
-const STORAGE_KEY = 'casinohub_app_state'
+  fetchAppState,
+  insertDenomination, updateDenomination,
+  insertTable, updateTable, toggleTable,
+  insertStaff, updateStaff,
+  insertTransaction, deleteTransaction,
+  insertInventoryRecord,
+  upsertDailySales,
+  insertTournament, updateTournament, deleteTournament,
+} from '../lib/database'
+import { useToast } from '../components/Toast'
+import { useAuth } from './AuthContext'
+import { setTenantId } from '../lib/supabase'
 
 const defaultState: AppState = {
-  denominations: initialDenominations,
-  tables: initialTables,
-  staff: initialStaff,
-  transactions: initialTransactions,
+  denominations: [],
+  tables: [],
+  staff: [],
+  transactions: [],
   inventoryRecords: [],
-  dailySales: initialDailySales,
+  dailySales: [],
   tournaments: [],
 }
 
@@ -81,46 +85,105 @@ function appReducer(state: AppState, action: AppAction): AppState {
   }
 }
 
-function loadState(): AppState {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      return JSON.parse(saved) as AppState
-    }
-  } catch {
-    // 読み込み失敗時はデフォルト
-  }
-  return defaultState
-}
-
 interface AppContextType {
   state: AppState
   dispatch: React.Dispatch<AppAction>
+  loading: boolean
 }
 
 const AppContext = createContext<AppContextType | null>(null)
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(appReducer, undefined, loadState)
+  const [state, rawDispatch] = useReducer(appReducer, defaultState)
+  const [loading, setLoading] = useState(true)
+  const { showToast } = useToast()
+  const { tenantId } = useAuth()
 
-  // localStorage に保存
+  // tenant_idが変わったらSupabaseモジュールに設定してデータを再取得
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  }, [state])
-
-  // 他タブとの同期
-  useEffect(() => {
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) {
-        dispatch({ type: 'LOAD_STATE', state: JSON.parse(e.newValue) })
-      }
+    if (!tenantId) {
+      setLoading(false)
+      return
     }
-    window.addEventListener('storage', handleStorage)
-    return () => window.removeEventListener('storage', handleStorage)
-  }, [])
+
+    setTenantId(tenantId)
+    setLoading(true)
+
+    fetchAppState()
+      .then(data => {
+        rawDispatch({ type: 'LOAD_STATE', state: data })
+      })
+      .catch(err => {
+        console.error('データ読み込みエラー:', err)
+        showToast('error', 'データの読み込みに失敗しました')
+      })
+      .finally(() => setLoading(false))
+  }, [tenantId, showToast])
+
+  // Supabaseへの同期（楽観的更新: UIは即座に反映、バックグラウンドでDB同期）
+  const syncToSupabase = useCallback(async (action: AppAction, currentState: AppState) => {
+    try {
+      switch (action.type) {
+        case 'ADD_TRANSACTION':
+          await insertTransaction(action.transaction)
+          break
+        case 'DELETE_TRANSACTION':
+          await deleteTransaction(action.id)
+          break
+        case 'ADD_TABLE':
+          await insertTable(action.table)
+          break
+        case 'UPDATE_TABLE':
+          await updateTable(action.table)
+          break
+        case 'TOGGLE_TABLE': {
+          const table = currentState.tables.find(t => t.id === action.id)
+          if (table) await toggleTable(action.id, table.isOpen)
+          break
+        }
+        case 'ADD_INVENTORY':
+          await insertInventoryRecord(action.record)
+          break
+        case 'UPDATE_DAILY_SALES':
+          await upsertDailySales(action.sales)
+          break
+        case 'ADD_STAFF':
+          await insertStaff(action.staff)
+          break
+        case 'UPDATE_STAFF':
+          await updateStaff(action.staff)
+          break
+        case 'ADD_DENOMINATION':
+          await insertDenomination(action.denomination)
+          break
+        case 'UPDATE_DENOMINATION':
+          await updateDenomination(action.denomination)
+          break
+        case 'ADD_TOURNAMENT':
+          await insertTournament(action.tournament)
+          break
+        case 'UPDATE_TOURNAMENT':
+          await updateTournament(action.tournament)
+          break
+        case 'DELETE_TOURNAMENT':
+          await deleteTournament(action.id)
+          break
+      }
+    } catch (err) {
+      console.error('Supabase同期エラー:', err)
+      const message = err instanceof Error ? err.message : '保存に失敗しました'
+      showToast('error', `同期エラー: ${message}`)
+    }
+  }, [showToast])
+
+  // 楽観的更新付きdispatch
+  const dispatch = useCallback((action: AppAction) => {
+    rawDispatch(action)
+    syncToSupabase(action, state)
+  }, [state, syncToSupabase])
 
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ state, dispatch, loading }}>
       {children}
     </AppContext.Provider>
   )

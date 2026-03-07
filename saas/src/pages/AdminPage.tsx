@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { LayoutDashboard, BarChart3, Settings, Trophy, Award, LogOut } from 'lucide-react'
-import DashboardTab from './DashboardTab'
-import ReportTab from './ReportTab'
-import SettingsTab from './SettingsTab'
-import TournamentTab from './TournamentTab'
-import LeaderboardPanel from '../components/LeaderboardPanel'
 import { useAuth } from '../contexts/AuthContext'
+
+// Code Splitting: 各タブを遅延読み込み
+const DashboardTab = lazy(() => import('./DashboardTab'))
+const TournamentTab = lazy(() => import('./TournamentTab'))
+const LeaderboardPanel = lazy(() => import('../components/LeaderboardPanel'))
+const ReportTab = lazy(() => import('./ReportTab'))
+const SettingsTab = lazy(() => import('./SettingsTab'))
 
 type Tab = 'dashboard' | 'tournament' | 'leaderboard' | 'report' | 'settings'
 
@@ -16,6 +18,14 @@ const tabs: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'report', label: '売上レポート', icon: BarChart3 },
   { id: 'settings', label: '設定', icon: Settings },
 ]
+
+function TabFallback() {
+  return (
+    <div className="flex items-center justify-center py-16">
+      <div className="w-6 h-6 border-2 border-[#2d8a4e] border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+}
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -71,11 +81,13 @@ export default function AdminPage() {
 
       {/* コンテンツ */}
       <main className="max-w-6xl mx-auto p-4">
-        {activeTab === 'dashboard' && <DashboardTab />}
-        {activeTab === 'tournament' && <TournamentTab />}
-        {activeTab === 'leaderboard' && <LeaderboardPanel />}
-        {activeTab === 'report' && <ReportTab />}
-        {activeTab === 'settings' && <SettingsTab />}
+        <Suspense fallback={<TabFallback />}>
+          {activeTab === 'dashboard' && <DashboardTab />}
+          {activeTab === 'tournament' && <TournamentTab />}
+          {activeTab === 'leaderboard' && <LeaderboardPanel />}
+          {activeTab === 'report' && <ReportTab />}
+          {activeTab === 'settings' && <SettingsTab />}
+        </Suspense>
       </main>
     </div>
   )

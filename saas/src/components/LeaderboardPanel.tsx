@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { Search, Trophy, Medal, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 import { aggregateLeaderboard, type PlayerStats } from '../lib/leaderboard'
+import { useDebounce } from '../lib/useDebounce'
 
 const PAGE_SIZE = 50
 
@@ -10,6 +11,7 @@ type PeriodFilter = 'all' | 'month' | 'week'
 export default function LeaderboardPanel() {
   const { state } = useApp()
   const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 300)
   const [periodFilter, setPeriodFilter] = useState<PeriodFilter>('all')
   const [page, setPage] = useState(0)
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
@@ -32,9 +34,9 @@ export default function LeaderboardPanel() {
   const leaderboard = useMemo(() => {
     return aggregateLeaderboard(state.tournaments, {
       ...dateRange,
-      searchQuery: search || undefined,
+      searchQuery: debouncedSearch || undefined,
     })
-  }, [state.tournaments, dateRange, search])
+  }, [state.tournaments, dateRange, debouncedSearch])
 
   const totalPages = Math.ceil(leaderboard.length / PAGE_SIZE)
   const pagedData = leaderboard.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)

@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Plus, Play, Pause, SkipForward, Square, Trophy, Users, Clock,
   ChevronLeft, UserPlus, RefreshCw, Award, Trash2, LayoutGrid,
-  Volume2, VolumeX,
+  Volume2, VolumeX, Download,
 } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 import { useToast } from '../components/Toast'
 import { generateId } from '../data/mockData'
+import { exportTournamentResultCSV } from '../lib/csvExport'
 import { distributePrizes } from '../lib/tournament-utils'
 import { assignPlayersToTables, needsTableBreak, breakTable, rebalanceTables, movePlayer, type TableAssignment } from '../lib/table-assignment'
 import { SkeletonCard } from '../components/LoadingAndEmpty'
@@ -501,6 +502,11 @@ function TournamentDetail({ tournament: t, onBack }: { tournament: Tournament; o
               <Square size={16} /> 終了
             </button>
           </>
+        )}
+        {t.status === 'finished' && (
+          <button onClick={() => exportTournamentResultCSV(t)} className="flex items-center gap-2 px-4 py-2 bg-[#2a3050] hover:bg-[#3a4060] rounded-lg text-sm font-medium transition-colors">
+            <Download size={16} /> 結果CSV
+          </button>
         )}
       </div>
 

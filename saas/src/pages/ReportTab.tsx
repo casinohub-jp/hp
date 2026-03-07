@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react'
+import { Download } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 import { SkeletonTable } from '../components/LoadingAndEmpty'
+import { exportTournamentSummaryCSV } from '../lib/csvExport'
 
 type Period = 'daily' | 'monthly'
 
@@ -102,24 +104,34 @@ export default function ReportTab() {
 
   return (
     <div className="space-y-4">
-      {/* 期間切り替え */}
-      <div className="flex gap-2">
-        <button
-          onClick={() => setPeriod('daily')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium ${
-            period === 'daily' ? 'bg-[#2d8a4e] text-white' : 'bg-[#121a2e] text-[#8090b0] border border-[#2a3050]'
-          }`}
-        >
-          日次
-        </button>
-        <button
-          onClick={() => setPeriod('monthly')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium ${
-            period === 'monthly' ? 'bg-[#2d8a4e] text-white' : 'bg-[#121a2e] text-[#8090b0] border border-[#2a3050]'
-          }`}
-        >
-          月次
-        </button>
+      {/* 期間切り替え + CSV */}
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPeriod('daily')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${
+              period === 'daily' ? 'bg-[#2d8a4e] text-white' : 'bg-[#121a2e] text-[#8090b0] border border-[#2a3050]'
+            }`}
+          >
+            日次
+          </button>
+          <button
+            onClick={() => setPeriod('monthly')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${
+              period === 'monthly' ? 'bg-[#2d8a4e] text-white' : 'bg-[#121a2e] text-[#8090b0] border border-[#2a3050]'
+            }`}
+          >
+            月次
+          </button>
+        </div>
+        {state.tournaments.length > 0 && (
+          <button
+            onClick={() => exportTournamentSummaryCSV(state.tournaments)}
+            className="flex items-center gap-2 px-4 py-2 bg-[#2a3050] hover:bg-[#3a4060] rounded-lg text-sm font-medium transition-colors"
+          >
+            <Download size={16} /> トーナメント集計CSV
+          </button>
+        )}
       </div>
 
       {period === 'daily' ? (

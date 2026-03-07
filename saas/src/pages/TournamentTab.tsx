@@ -4,9 +4,10 @@ import {
   ChevronLeft, UserPlus, RefreshCw, Award, Trash2, LayoutGrid,
 } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
+import { useToast } from '../components/Toast'
 import { generateId } from '../data/mockData'
 import { distributePrizes } from '../lib/tournament-utils'
-import { assignPlayersToTables, type TableAssignment } from '../lib/table-assignment'
+import { assignPlayersToTables, needsTableBreak, breakTable, rebalanceTables, movePlayer, type TableAssignment } from '../lib/table-assignment'
 import { SkeletonCard } from '../components/LoadingAndEmpty'
 import type { Tournament, BlindLevel, TournamentEntry, PrizeLevel, TournamentStatus } from '../types'
 
@@ -794,7 +795,11 @@ function TableAssignmentPanel({
   onAssign: (assignments: TableAssignment[]) => void
 }) {
   const { state } = useApp()
+  const { showToast } = useToast()
   const [maxPerTable, setMaxPerTable] = useState(9)
+  const [movePlayerId, setMovePlayerId] = useState<string | null>(null)
+  const [showBreakPreview, setShowBreakPreview] = useState(false)
+  const [breakPreview, setBreakPreview] = useState<TableAssignment[]>([])
 
   const activeEntries = t.entries.filter(e => !e.eliminatedAt)
   const availableTables = state.tables
@@ -803,6 +808,47 @@ function TableAssignmentPanel({
     if (availableTables.length === 0 || activeEntries.length === 0) return
     const result = assignPlayersToTables(t.entries, availableTables, maxPerTable)
     onAssign(result)
+  }
+
+  const handleReset = () => {
+    onAssign([])
+    setMovePlayerId(null)
+    setShowBreakPreview(false)
+  }
+
+  // テーブルブレイク提案
+  const shouldBreak = assignments.length > 0 && needsTableBreak(assignments, maxPerTable)
+
+  const handleBreakPreview = () => {
+    const preview = breakTable(assignments, maxPerTable)
+    setBreakPreview(preview)
+    setShowBreakPreview(true)
+  }
+
+  const handleBreakConfirm = () => {
+    onAssign(breakPreview)
+    setShowBreakPreview(false)
+    setBreakPreview([])
+    showToast('success', 'テーブルブレイクを実行しました')
+  }
+
+  const handleRebalance = () => {
+    const result = rebalanceTables(assignments)
+    onAssign(result)
+    showToast('success', 'テーブルのバランスを調整しました')
+  }
+
+  // 手動移動
+  const handleMovePlayer = (targetTableId: string) => {
+    if (!movePlayerId) return
+    const result = movePlayer(assignments, movePlayerId, targetTableId, maxPerTable)
+    if (result.error) {
+      showToast('error', result.error)
+    } else {
+      onAssign(result.assignments)
+      showToast('success', 'プレイヤーを移動しました')
+    }
+    setMovePlayerId(null)
   }
 
   return (
@@ -827,14 +873,34 @@ function TableAssignmentPanel({
           </div>
         </div>
 
-        <button
-          onClick={handleAssign}
-          disabled={availableTables.length === 0 || activeEntries.length === 0}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#2d8a4e] hover:bg-[#247a42] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors"
-        >
-          <LayoutGrid size={16} />
-          テーブルを割り当てる
-        </button>
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={handleAssign}
+            disabled={availableTables.length === 0 || activeEntries.length === 0}
+            className="flex items-center gap-2 px-4 py-2.5 bg-[#2d8a4e] hover:bg-[#247a42] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors"
+          >
+            <LayoutGrid size={16} />
+            自動配置
+          </button>
+
+          {assignments.length > 0 && (
+            <>
+              <button
+                onClick={handleRebalance}
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#2a3050] hover:bg-[#3a4060] rounded-lg text-sm font-medium transition-colors"
+              >
+                <RefreshCw size={16} />
+                バランス調整
+              </button>
+              <button
+                onClick={handleReset}
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#2a3050] hover:bg-[#3a4060] rounded-lg text-sm font-medium text-red-400 transition-colors"
+              >
+                リセット
+              </button>
+            </>
+          )}
+        </div>
 
         {availableTables.length === 0 && (
           <p className="text-xs text-amber-400">
@@ -843,26 +909,126 @@ function TableAssignmentPanel({
         )}
       </div>
 
-      {/* 割当結果 */}
-      {assignments.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="text-sm font-medium text-[#8090b0]">割当結果</h4>
-          {assignments.map(a => (
-            <div key={a.tableId} className="bg-[#121a2e] border border-[#2a3050] rounded-xl overflow-hidden">
-              <div className="px-4 py-3 border-b border-[#2a3050] flex items-center justify-between">
-                <span className="font-medium">{a.tableName}</span>
+      {/* テーブルブレイク提案 */}
+      {shouldBreak && !showBreakPreview && (
+        <div className="bg-amber-900/20 border border-amber-500/40 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <div className="text-sm font-medium text-amber-400">テーブルブレイクを推奨</div>
+            <div className="text-xs text-[#8090b0] mt-1">
+              テーブル間の人数差が大きいか、テーブル数を減らせる状態です
+            </div>
+          </div>
+          <button
+            onClick={handleBreakPreview}
+            className="px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded-lg text-sm font-medium transition-colors"
+          >
+            プレビュー
+          </button>
+        </div>
+      )}
+
+      {/* ブレイクプレビュー */}
+      {showBreakPreview && breakPreview.length > 0 && (
+        <div className="bg-[#121a2e] border border-amber-500/40 rounded-xl p-4 space-y-3">
+          <div className="text-sm font-medium text-amber-400">テーブルブレイク結果（プレビュー）</div>
+          {breakPreview.map(a => (
+            <div key={a.tableId} className="bg-[#0d1420] border border-[#2a3050] rounded-lg p-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">{a.tableName}</span>
                 <span className="text-xs text-[#8090b0]">{a.entries.length}人</span>
               </div>
-              <div className="divide-y divide-[#2a3050]/30">
-                {a.entries.map(e => (
-                  <div key={e.id} className="px-4 py-2.5 flex items-center justify-between text-sm">
-                    <span>{e.playerName}</span>
-                    <span className="text-xs text-[#8090b0]">Seat {e.seatNumber}</span>
-                  </div>
-                ))}
+              <div className="text-xs text-[#8090b0]">
+                {a.entries.map(e => e.playerName).join(', ')}
               </div>
             </div>
           ))}
+          <div className="flex gap-2">
+            <button
+              onClick={handleBreakConfirm}
+              className="px-4 py-2 bg-[#2d8a4e] hover:bg-[#247a42] rounded-lg text-sm font-medium transition-colors"
+            >
+              実行する
+            </button>
+            <button
+              onClick={() => { setShowBreakPreview(false); setBreakPreview([]) }}
+              className="px-4 py-2 bg-[#2a3050] hover:bg-[#3a4060] rounded-lg text-sm transition-colors"
+            >
+              キャンセル
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 割当結果 */}
+      {assignments.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-medium text-[#8090b0]">割当結果</h4>
+            {movePlayerId && (
+              <button
+                onClick={() => setMovePlayerId(null)}
+                className="text-xs text-[#8090b0] hover:text-white"
+              >
+                移動をキャンセル
+              </button>
+            )}
+          </div>
+          {assignments.map(a => {
+            // 定員バー
+            const fillPercent = Math.min(100, (a.entries.length / maxPerTable) * 100)
+            return (
+              <div key={a.tableId} className="bg-[#121a2e] border border-[#2a3050] rounded-xl overflow-hidden">
+                <div className="px-4 py-3 border-b border-[#2a3050]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium">{a.tableName}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-[#8090b0]">{a.entries.length}/{maxPerTable}人</span>
+                      {movePlayerId && a.entries.every(e => e.id !== movePlayerId) && (
+                        <button
+                          onClick={() => handleMovePlayer(a.tableId)}
+                          className="px-2 py-1 bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 rounded text-xs transition-colors"
+                        >
+                          ここに移動
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {/* 定員バー */}
+                  <div className="h-1.5 bg-[#2a3050] rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        fillPercent >= 100 ? 'bg-red-400' : fillPercent >= 80 ? 'bg-amber-400' : 'bg-[#2d8a4e]'
+                      }`}
+                      style={{ width: `${fillPercent}%` }}
+                    />
+                  </div>
+                </div>
+                <div className="divide-y divide-[#2a3050]/30">
+                  {a.entries.map(e => (
+                    <div
+                      key={e.id}
+                      className={`px-4 py-2.5 flex items-center justify-between text-sm ${
+                        movePlayerId === e.id ? 'bg-blue-600/10' : ''
+                      }`}
+                    >
+                      <span>{e.playerName}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-[#8090b0]">Seat {e.seatNumber}</span>
+                        {!movePlayerId && assignments.length > 1 && (
+                          <button
+                            onClick={() => setMovePlayerId(e.id)}
+                            className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                          >
+                            移動
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

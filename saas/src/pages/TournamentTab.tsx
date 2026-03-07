@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Plus, Play, Pause, SkipForward, Square, Trophy, Users, Clock,
   ChevronLeft, UserPlus, RefreshCw, Award, Trash2, LayoutGrid,
+  Volume2, VolumeX,
 } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 import { useToast } from '../components/Toast'
@@ -9,6 +10,11 @@ import { generateId } from '../data/mockData'
 import { distributePrizes } from '../lib/tournament-utils'
 import { assignPlayersToTables, needsTableBreak, breakTable, rebalanceTables, movePlayer, type TableAssignment } from '../lib/table-assignment'
 import { SkeletonCard } from '../components/LoadingAndEmpty'
+import {
+  initAudio, playLevelChange, playOneMinuteWarning,
+  playCountdownTick, playFinalCountdown,
+  toggleMute, getMuted, setVolume as setAudioVolume, getVolume,
+} from '../lib/audioNotification'
 import type { Tournament, BlindLevel, TournamentEntry, PrizeLevel, TournamentStatus } from '../types'
 
 // デフォルトのブラインド構造（20分レベル）
@@ -687,6 +693,11 @@ function BlindTimer({ tournament: t, onNextLevel }: { tournament: Tournament; on
   const nextBlind = t.blindStructure[t.currentLevel + 1]
 
   const [remainingSeconds, setRemainingSeconds] = useState(0)
+  const [muted, setMuted] = useState(() => getMuted())
+  const [volume, setVolumeState] = useState(() => getVolume())
+
+  // 音声通知用: 前回の秒数を追跡して特定タイミングで音を鳴らす
+  const prevSecondsRef = useRef(0)
 
   useEffect(() => {
     if (t.status !== 'running' || !t.levelStartedAt || !currentBlind) {
@@ -697,8 +708,28 @@ function BlindTimer({ tournament: t, onNextLevel }: { tournament: Tournament; on
     const updateTimer = () => {
       const elapsed = Math.floor((Date.now() - new Date(t.levelStartedAt!).getTime()) / 1000)
       const remaining = Math.max(0, currentBlind.durationMinutes * 60 - elapsed)
+      const prev = prevSecondsRef.current
+      prevSecondsRef.current = remaining
+
+      // 音声通知
+      if (remaining !== prev) {
+        // 残り1分になった瞬間
+        if (remaining === 60 && prev > 60) {
+          playOneMinuteWarning()
+        }
+        // 残り10〜4秒: カウントダウン音
+        if (remaining <= 10 && remaining >= 4 && prev > remaining) {
+          playCountdownTick()
+        }
+        // 残り3秒以下: 高速カウントダウン
+        if (remaining <= 3 && remaining >= 1 && prev > remaining) {
+          playFinalCountdown()
+        }
+      }
+
       setRemainingSeconds(remaining)
       if (remaining === 0 && nextBlind) {
+        playLevelChange()
         onNextLevel()
       }
     }
@@ -708,6 +739,22 @@ function BlindTimer({ tournament: t, onNextLevel }: { tournament: Tournament; on
     return () => clearInterval(interval)
   }, [t.status, t.levelStartedAt, currentBlind, nextBlind, onNextLevel])
 
+  const handleToggleMute = () => {
+    const newMuted = toggleMute()
+    setMuted(newMuted)
+  }
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Number(e.target.value) / 100
+    setAudioVolume(v)
+    setVolumeState(v)
+  }
+
+  // AudioContextの初期化（ユーザーインタラクション時）
+  const handleInitAudio = () => {
+    initAudio()
+  }
+
   const minutes = Math.floor(remainingSeconds / 60)
   const seconds = remainingSeconds % 60
 
@@ -716,8 +763,18 @@ function BlindTimer({ tournament: t, onNextLevel }: { tournament: Tournament; on
   return (
     <div className="space-y-4">
       {/* 現在のレベル */}
-      <div className="bg-[#121a2e] border border-[#2a3050] rounded-xl p-6 text-center">
-        <div className="text-sm text-[#8090b0] mb-2">Level {currentBlind.level}</div>
+      <div className="bg-[#121a2e] border border-[#2a3050] rounded-xl p-6 text-center" onClick={handleInitAudio}>
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <span className="text-sm text-[#8090b0]">Level {currentBlind.level}</span>
+          {/* ミュートボタン */}
+          <button
+            onClick={(e) => { e.stopPropagation(); handleInitAudio(); handleToggleMute() }}
+            className={`p-1.5 rounded-lg transition-colors ${muted ? 'text-red-400 bg-red-400/10' : 'text-[#8090b0] hover:text-white'}`}
+            title={muted ? 'ミュート解除' : 'ミュート'}
+          >
+            {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          </button>
+        </div>
         <div className="text-4xl font-bold mb-2">
           {currentBlind.smallBlind.toLocaleString()} / {currentBlind.bigBlind.toLocaleString()}
         </div>
@@ -732,6 +789,23 @@ function BlindTimer({ tournament: t, onNextLevel }: { tournament: Tournament; on
           {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
         </div>
         <div className="text-xs text-[#8090b0] mt-1">{currentBlind.durationMinutes}分</div>
+
+        {/* 音量スライダー（ミュートでない場合のみ） */}
+        {!muted && (
+          <div className="flex items-center justify-center gap-2 mt-3">
+            <Volume2 size={14} className="text-[#8090b0]" />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={Math.round(volume * 100)}
+              onChange={handleVolumeChange}
+              onClick={(e) => { e.stopPropagation(); handleInitAudio() }}
+              className="w-32 h-1.5 bg-[#2a3050] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#2d8a4e]"
+            />
+            <span className="text-xs text-[#8090b0] w-8">{Math.round(volume * 100)}%</span>
+          </div>
+        )}
       </div>
 
       {/* 次のレベルプレビュー */}

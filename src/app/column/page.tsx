@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   title: "コラム",
   description:
     "アミューズメントカジノの開業・運営・チップ管理・法務に関する記事をまとめています。",
+  alternates: {
+    canonical: "https://casinohub.jp/column",
+  },
+  openGraph: {
+    url: "https://casinohub.jp/column",
+  },
 };
 
 export default function ColumnPage() {

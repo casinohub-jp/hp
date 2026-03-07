@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 const GA_ID = "G-YEXNSJ32KQ";
+const BASE_URL = "https://casinohub.jp";
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
@@ -13,24 +14,42 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://casinohub.jp"),
+  metadataBase: new URL(BASE_URL),
   title: {
     default: "Casinohub | アミューズメントカジノ向けトーナメント管理SaaS",
     template: "%s | Casinohub",
   },
   description:
     "アミューズメントカジノのトーナメント運営をもっとスマートに。参加者登録・テーブル割当・順位集計・賞金配分をクラウドで一元管理。",
+  alternates: {
+    canonical: BASE_URL,
+  },
   openGraph: {
     siteName: "Casinohub",
     locale: "ja_JP",
     type: "website",
-    url: "https://casinohub.jp",
+    url: BASE_URL,
   },
   twitter: {
     card: "summary",
     title: "Casinohub | アミューズメントカジノ向けトーナメント管理SaaS",
     description:
       "アミューズメントカジノのトーナメント運営をもっとスマートに。参加者登録・テーブル割当・順位集計・賞金配分をクラウドで一元管理。",
+  },
+};
+
+/* JSON-LD: WebSite構造化データ（全ページ共通） */
+const jsonLdWebSite = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Casinohub",
+  url: BASE_URL,
+  description:
+    "アミューズメントカジノのトーナメント運営をもっとスマートに。参加者登録・テーブル割当・順位集計・賞金配分をクラウドで一元管理。",
+  publisher: {
+    "@type": "Organization",
+    name: "Casinohub",
+    url: BASE_URL,
   },
 };
 
@@ -42,6 +61,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }}
+        />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"

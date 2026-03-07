@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   title: "お問い合わせ",
   description:
     "Casinohubへのお問い合わせはこちらから。導入のご相談、機能に関するご質問など、お気軽にご連絡ください。",
+  alternates: {
+    canonical: "https://casinohub.jp/contact",
+  },
+  openGraph: {
+    url: "https://casinohub.jp/contact",
+  },
 };
 
 export default function ContactPage() {

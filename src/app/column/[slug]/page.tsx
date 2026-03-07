@@ -16,9 +16,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) return {};
+  const url = `https://casinohub.jp/column/${slug}`;
   return {
     title: article.title,
     description: article.description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: article.title,
+      description: article.description,
+      url,
+      type: "article",
+      publishedTime: article.date,
+    },
   };
 }
 
@@ -27,8 +38,35 @@ export default async function ArticlePage({ params }: Props) {
   const article = getArticle(slug);
   if (!article) notFound();
 
+  const jsonLdArticle = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    datePublished: article.date,
+    url: `https://casinohub.jp/column/${slug}`,
+    author: {
+      "@type": "Organization",
+      name: "Casinohub",
+      url: "https://casinohub.jp",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Casinohub",
+      url: "https://casinohub.jp",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://casinohub.jp/column/${slug}`,
+    },
+  };
+
   return (
     <section className="pt-24 pb-20 px-4 bg-ch-bg">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}
+      />
       <article className="mx-auto max-w-3xl">
         <Link
           href="/column"

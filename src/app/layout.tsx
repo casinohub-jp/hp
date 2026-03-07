@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     url: BASE_URL,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Casinohub | アミューズメントカジノ向けトーナメント管理SaaS",
     description:
       "アミューズメントカジノのトーナメント運営をもっとスマートに。参加者登録・テーブル割当・順位集計・賞金配分をクラウドで一元管理。",

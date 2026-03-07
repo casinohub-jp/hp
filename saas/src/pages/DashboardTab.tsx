@@ -1,8 +1,19 @@
-import { Trophy, Users, Calendar, Table2 } from 'lucide-react'
+import { Trophy, Users, Calendar, Table2, Settings } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
+import { SkeletonGrid, SkeletonCard, EmptyState } from '../components/LoadingAndEmpty'
 
 export default function DashboardTab() {
-  const { state } = useApp()
+  const { state, loading } = useApp()
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <SkeletonGrid count={4} />
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    )
+  }
 
   // トーナメント
   const activeTournaments = state.tournaments.filter(t => t.status === 'running' || t.status === 'paused')
@@ -51,6 +62,13 @@ export default function DashboardTab() {
       {/* テーブル状況 */}
       <div className="rounded-xl border border-[#2a3050] bg-[#121a2e] p-4">
         <h2 className="text-sm font-bold text-[#8090b0] mb-3">テーブル状況</h2>
+        {state.tables.length === 0 ? (
+          <EmptyState
+            icon={<Settings size={48} />}
+            title="テーブルが登録されていません"
+            description="設定タブからテーブルを追加してください"
+          />
+        ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
           {state.tables.map(table => (
             <div
@@ -71,6 +89,7 @@ export default function DashboardTab() {
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* トーナメント情報 */}

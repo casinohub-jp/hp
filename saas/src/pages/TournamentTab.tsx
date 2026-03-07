@@ -7,6 +7,7 @@ import { useApp } from '../contexts/AppContext'
 import { generateId } from '../data/mockData'
 import { distributePrizes } from '../lib/tournament-utils'
 import { assignPlayersToTables, type TableAssignment } from '../lib/table-assignment'
+import { SkeletonCard } from '../components/LoadingAndEmpty'
 import type { Tournament, BlindLevel, TournamentEntry, PrizeLevel, TournamentStatus } from '../types'
 
 // デフォルトのブラインド構造（20分レベル）
@@ -49,9 +50,22 @@ const statusColors: Record<TournamentStatus, string> = {
 }
 
 export default function TournamentTab() {
-  const { state } = useApp()
+  const { state, loading } = useApp()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="h-6 w-40 bg-[#2a3050] rounded animate-pulse" />
+          <div className="h-10 w-24 bg-[#2a3050] rounded-lg animate-pulse" />
+        </div>
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    )
+  }
 
   const selected = state.tournaments.find(t => t.id === selectedId) ?? null
 

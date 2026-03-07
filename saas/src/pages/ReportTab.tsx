@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useApp } from '../contexts/AppContext'
+import { SkeletonTable } from '../components/LoadingAndEmpty'
 
 type Period = 'daily' | 'monthly'
 
 export default function ReportTab() {
-  const { state } = useApp()
+  const { state, loading } = useApp()
   const [period, setPeriod] = useState<Period>('daily')
 
   // 日次: 取引データから日ごとの売上を集計
@@ -86,6 +87,18 @@ export default function ReportTab() {
       .sort(([a], [b]) => b.localeCompare(a))
       .map(([month, data]) => ({ month, ...data }))
   }, [dailyReport])
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="flex gap-2">
+          <div className="w-16 h-10 bg-[#2a3050] rounded-lg animate-pulse" />
+          <div className="w-16 h-10 bg-[#2a3050] rounded-lg animate-pulse" />
+        </div>
+        <SkeletonTable rows={5} />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">

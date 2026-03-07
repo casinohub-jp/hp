@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useApp } from '../contexts/AppContext'
 import { generateId } from '../data/mockData'
+import { SkeletonCard } from '../components/LoadingAndEmpty'
 import type { GameType, StaffRole } from '../types'
 
 type SettingsSection = 'tables' | 'staff' | 'denominations'
@@ -22,6 +23,19 @@ const staffRoleLabels: Record<StaffRole, string> = {
 
 export default function SettingsTab() {
   const [section, setSection] = useState<SettingsSection>('tables')
+  const { loading } = useApp()
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="flex gap-2">
+          {[1, 2, 3].map(i => <div key={i} className="w-20 h-10 bg-[#2a3050] rounded-lg animate-pulse" />)}
+        </div>
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">

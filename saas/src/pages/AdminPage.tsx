@@ -1,16 +1,18 @@
 import { useState } from 'react'
-import { LayoutDashboard, BarChart3, Settings, Trophy, LogOut } from 'lucide-react'
+import { LayoutDashboard, BarChart3, Settings, Trophy, Award, LogOut } from 'lucide-react'
 import DashboardTab from './DashboardTab'
 import ReportTab from './ReportTab'
 import SettingsTab from './SettingsTab'
 import TournamentTab from './TournamentTab'
+import LeaderboardPanel from '../components/LeaderboardPanel'
 import { useAuth } from '../contexts/AuthContext'
 
-type Tab = 'dashboard' | 'tournament' | 'report' | 'settings'
+type Tab = 'dashboard' | 'tournament' | 'leaderboard' | 'report' | 'settings'
 
 const tabs: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'dashboard', label: 'ダッシュボード', icon: LayoutDashboard },
   { id: 'tournament', label: 'トーナメント', icon: Trophy },
+  { id: 'leaderboard', label: 'ランキング', icon: Award },
   { id: 'report', label: '売上レポート', icon: BarChart3 },
   { id: 'settings', label: '設定', icon: Settings },
 ]
@@ -71,6 +73,7 @@ export default function AdminPage() {
       <main className="max-w-6xl mx-auto p-4">
         {activeTab === 'dashboard' && <DashboardTab />}
         {activeTab === 'tournament' && <TournamentTab />}
+        {activeTab === 'leaderboard' && <LeaderboardPanel />}
         {activeTab === 'report' && <ReportTab />}
         {activeTab === 'settings' && <SettingsTab />}
       </main>

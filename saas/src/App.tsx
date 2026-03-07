@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ToastProvider } from './components/Toast'
 import { AppProvider } from './contexts/AppContext'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { initErrorReporter } from './lib/errorReporter'
 import AdminPage from './pages/AdminPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
@@ -38,11 +40,17 @@ function AuthenticatedApp() {
 }
 
 export default function App() {
+  useEffect(() => {
+    initErrorReporter()
+  }, [])
+
   return (
-    <ToastProvider>
-      <AuthProvider>
-        <AuthenticatedApp />
-      </AuthProvider>
-    </ToastProvider>
+    <ErrorBoundary>
+      <ToastProvider>
+        <AuthProvider>
+          <AuthenticatedApp />
+        </AuthProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   )
 }

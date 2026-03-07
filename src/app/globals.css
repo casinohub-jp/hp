@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Casino Dreams — ライトベース × マゼンタ × シアン */
+  --color-ch-bg: #faf8ff;
+  --color-ch-surface: #ffffff;
+  --color-ch-surface-alt: #f0ecff;
+  --color-ch-hero-from: #1a0533;
+  --color-ch-hero-to: #0c1a3a;
+  --color-ch-primary: #d946ef;
+  --color-ch-primary-light: #e879f9;
+  --color-ch-primary-dark: #a21caf;
+  --color-ch-accent: #06b6d4;
+  --color-ch-accent-light: #22d3ee;
+  --color-ch-green: #10b981;
+  --color-ch-red: #f43f5e;
+  --color-ch-border: #e2ddf0;
+  --color-ch-border-hover: #cfc8e6;
+  --color-ch-text: #1a1035;
+  --color-ch-text-secondary: #6b5f8a;
+  --color-ch-text-muted: #9b93b8;
+}
+
+body {
+  background-color: var(--color-ch-bg);
+  color: var(--color-ch-text);
+}
+
+/* ========== アニメーション ========== */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.7s ease-out both; }
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+.animate-glow { animation: glow-pulse 5s ease-in-out infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(4deg); }
+}
+.animate-float { animation: float 8s ease-in-out infinite; }
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(14px) rotate(-3deg); }
+}
+.animate-float-reverse { animation: float-reverse 7s ease-in-out infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* カード柄デコレーション（ヒーロー用・白文字） */
+.suit-deco {
+  position: absolute;
+  font-size: 6rem;
+  line-height: 1;
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+  color: #fff;
+}
+
+/* カード柄デコレーション（ライトセクション用） */
+.suit-deco-light {
+  position: absolute;
+  font-size: 5rem;
+  line-height: 1;
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
+  color: var(--color-ch-primary);
+}
+
+/* ========== prose ========== */
+
+.prose-ch h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--color-ch-text);
+}
+
+.prose-ch h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-ch-primary-dark);
+  border-bottom: 1px solid var(--color-ch-border);
+  padding-bottom: 0.5rem;
+}
+
+.prose-ch h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-ch-text);
+}
+
+.prose-ch p {
+  margin-bottom: 1.25rem;
+  line-height: 1.85;
+  color: var(--color-ch-text-secondary);
+}
+
+.prose-ch ul, .prose-ch ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+  color: var(--color-ch-text-secondary);
+}
+
+.prose-ch li {
+  margin-bottom: 0.5rem;
+  line-height: 1.75;
+}
+
+.prose-ch strong {
+  color: var(--color-ch-primary-dark);
+  font-weight: 600;
+}
+
+.prose-ch blockquote {
+  border-left: 3px solid var(--color-ch-primary);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--color-ch-text-muted);
+}
+
+.prose-ch a {
+  color: var(--color-ch-accent);
+  text-decoration: underline;
+}
+
+.prose-ch table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--color-ch-border);
+  font-size: 0.9rem;
+}
+
+.prose-ch th, .prose-ch td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  color: var(--color-ch-text-secondary);
+  border-bottom: 1px solid var(--color-ch-border);
+  line-height: 1.6;
+}
+
+.prose-ch th {
+  background: linear-gradient(135deg, #1a0533, #2a1050);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.prose-ch th + th,
+.prose-ch td + td {
+  border-left: 1px solid var(--color-ch-border);
+}
+
+.prose-ch th + th {
+  border-left-color: rgba(255, 255, 255, 0.15);
+}
+
+.prose-ch tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-ch tbody tr:nth-child(even) {
+  background: var(--color-ch-surface-alt);
+}
+
+.prose-ch tbody tr:hover {
+  background: #ece6ff;
+  transition: background 0.15s ease;
+}

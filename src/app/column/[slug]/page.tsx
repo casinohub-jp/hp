@@ -61,11 +61,40 @@ export default async function ArticlePage({ params }: Props) {
     },
   };
 
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "トップ",
+        item: "https://casinohub.jp",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "コラム",
+        item: "https://casinohub.jp/column",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.title,
+        item: `https://casinohub.jp/column/${slug}`,
+      },
+    ],
+  };
+
   return (
     <section className="pt-24 pb-20 px-4 bg-ch-bg">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
       />
       <article className="mx-auto max-w-3xl">
         <Link

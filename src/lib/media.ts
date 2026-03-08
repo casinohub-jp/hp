@@ -7,6 +7,7 @@ export interface Article {
   title: string;
   description: string;
   date: string;
+  lastModified?: string;
   category: string;
   tags: string[];
   content: string;
@@ -33,6 +34,7 @@ export function getAllArticles(): Article[] {
       title: data.title || "",
       description: data.description || "",
       date: data.date || "",
+      lastModified: data.lastModified || undefined,
       category: data.category || "",
       tags: data.tags || [],
       content,
@@ -57,6 +59,7 @@ export function getArticle(slug: string): Article | undefined {
     title: data.title || "",
     description: data.description || "",
     date: data.date || "",
+    lastModified: data.lastModified || undefined,
     category: data.category || "",
     tags: data.tags || [],
     content,

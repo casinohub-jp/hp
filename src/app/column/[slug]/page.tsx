@@ -30,6 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url,
       type: "article",
       publishedTime: article.date,
+      modifiedTime: article.lastModified || article.date,
     },
   };
 }
@@ -45,6 +46,7 @@ export default async function ArticlePage({ params }: Props) {
     headline: article.title,
     description: article.description,
     datePublished: article.date,
+    dateModified: article.lastModified || article.date,
     url: `https://casinohub.jp/column/${slug}`,
     author: {
       "@type": "Organization",
@@ -60,6 +62,7 @@ export default async function ArticlePage({ params }: Props) {
       "@type": "WebPage",
       "@id": `https://casinohub.jp/column/${slug}`,
     },
+    ...(article.tags.length > 0 ? { keywords: article.tags.join(", ") } : {}),
   };
 
   const jsonLdBreadcrumb = {
@@ -107,7 +110,7 @@ export default async function ArticlePage({ params }: Props) {
         </Link>
         <div className="bg-white rounded-2xl border border-ch-border p-6 md:p-10">
           <p className="text-xs text-ch-text-muted mb-3">
-            {article.date} ・ {article.category}
+            {article.date}{article.lastModified && article.lastModified !== article.date && `（更新: ${article.lastModified}）`} ・ {article.category}
           </p>
           <h1 className="text-2xl md:text-3xl font-bold text-ch-text mb-6">
             {article.title}

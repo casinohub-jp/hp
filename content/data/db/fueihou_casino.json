@@ -1,0 +1,56 @@
+[
+  {
+    "id": "license_type",
+    "category": "regulation",
+    "key": "business_license_type",
+    "value": "遊技場営業（4号営業）",
+    "governing_law": "風営法（風俗営業等の規制及び業務の適正化等に関する法律）",
+    "issuing_authority": "公安委員会",
+    "source_article": "what-is-amusement-casino",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "operating_hours",
+    "category": "regulation",
+    "key": "operating_hours_limit",
+    "operating_hours_close_h": 0,
+    "note": "深夜営業不可",
+    "source_article": "what-is-amusement-casino",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "cash_exchange",
+    "category": "regulation",
+    "key": "cash_exchange_allowed",
+    "value": false,
+    "note": "換金は一切不可。賭博罪（刑法）には該当しない",
+    "source_article": "what-is-amusement-casino",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "public_finance_restriction",
+    "category": "regulation",
+    "key": "public_finance_eligibility",
+    "value": false,
+    "details": [
+      {
+        "institution": "日本政策金融公庫",
+        "eligible": false,
+        "reason": "遊技場営業の許可が必要な事業は原則として融資対象外"
+      },
+      {
+        "institution": "信用保証協会（保証付き融資）",
+        "eligible": false,
+        "reason": "風俗営業に該当する業種は保証対象外となるケースが多い"
+      },
+      {
+        "institution": "小規模事業者持続化補助金",
+        "eligible": false,
+        "reason": "風俗営業は対象外"
+      }
+    ],
+    "note": "開業資金は自己資金が基本。パチンコホールと同じカテゴリに分類される",
+    "source_article": "casino-startup-costs",
+    "last_verified": "2026-03-08"
+  }
+]

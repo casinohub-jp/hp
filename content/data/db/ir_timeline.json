@@ -1,0 +1,112 @@
+[
+  {
+    "id": "ir_construction_start",
+    "category": "timeline",
+    "date": "2025-04",
+    "event": "大阪・夢洲IR本体工事着工",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_opening",
+    "category": "timeline",
+    "date": null,
+    "date_year": 2030,
+    "date_season": "autumn",
+    "event": "大阪IR開業予定",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_location",
+    "category": "facility",
+    "key": "location",
+    "value": "大阪・夢洲（ゆめしま）",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_investment",
+    "category": "facility",
+    "key": "investment_amount",
+    "value_jpy": 1513000000000,
+    "currency": "JPY",
+    "note": "約1兆5,130億円",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_operator",
+    "category": "facility",
+    "key": "operator",
+    "value": "MGMリゾーツ + オリックス",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_annual_visitors",
+    "category": "facility",
+    "key": "annual_visitors",
+    "value": 20000000,
+    "unit": "persons_per_year",
+    "breakdown": {
+      "domestic": 14000000,
+      "international": 6000000
+    },
+    "estimated": true,
+    "note": "大阪府の公式見込み値",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_casino_area",
+    "category": "facility",
+    "key": "casino_floor_area",
+    "value": 23000,
+    "unit": "sqm",
+    "note": "施設全体の3%未満（IR整備法の上限規定）",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_economic_impact",
+    "category": "facility",
+    "key": "annual_economic_impact",
+    "value_jpy": 1140000000000,
+    "currency": "JPY",
+    "unit": "jpy_per_year",
+    "note": "年間約1兆1,400億円（大阪府の公式試算）",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "ir_employment",
+    "category": "facility",
+    "key": "total_employment",
+    "value": 15000,
+    "unit": "persons",
+    "note": "大阪府の公式資料",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "mbs_comparison_area",
+    "category": "comparison",
+    "key": "marina_bay_sands_casino_area",
+    "value": 15000,
+    "unit": "sqm",
+    "note": "大阪IR（23,000㎡）はMBSの約1.5倍",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  },
+  {
+    "id": "mbs_comparison_investment",
+    "category": "comparison",
+    "key": "marina_bay_sands_investment",
+    "value_jpy": 550000000000,
+    "currency": "JPY",
+    "note": "約5,500億円。大阪IRは約3倍",
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  }
+]

@@ -14,6 +14,13 @@ export interface Article {
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "column");
 
+// 公開済みかどうか（dateが今日以前ならtrue）
+function isPublished(date: string): boolean {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(date) <= today;
+}
+
 export function getAllArticles(): Article[] {
   if (!fs.existsSync(CONTENT_DIR)) return [];
   const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
@@ -31,9 +38,11 @@ export function getAllArticles(): Article[] {
       content,
     };
   });
-  return articles.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  return articles
+    .filter((a) => isPublished(a.date))
+    .sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
 }
 
 export function getArticle(slug: string): Article | undefined {
@@ -41,6 +50,8 @@ export function getArticle(slug: string): Article | undefined {
   if (!fs.existsSync(filePath)) return undefined;
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
+  // 未公開記事はundefinedを返す
+  if (!isPublished(data.date || "")) return undefined;
   return {
     slug,
     title: data.title || "",
@@ -53,11 +64,8 @@ export function getArticle(slug: string): Article | undefined {
 }
 
 export function getAllSlugs(): string[] {
-  if (!fs.existsSync(CONTENT_DIR)) return [];
-  return fs
-    .readdirSync(CONTENT_DIR)
-    .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.mdx$/, ""));
+  // 公開済みのみ
+  return getAllArticles().map((a) => a.slug);
 }
 
 export function getAllTags(): string[] {

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "pachinko_market_size",
+    "category": "market_size_comparison",
+    "value_jpy": 14000000000000,
+    "unit": "jpy_per_year",
+
+    "note": "パチンコ産業市場規模（14兆円）",
+    "estimated": false,
+    "source_article": "ir-amusement-casino-future",
+    "last_verified": "2026-03-08"
+  }
+]

@@ -2,7 +2,9 @@
   {
     "id": "ir_construction_start",
     "category": "timeline",
-    "date": "2025-04",
+    "date": null,
+    "date_year": 2025,
+    "date_month": 4,
     "event": "大阪・夢洲IR本体工事着工",
     "source_article": "ir-amusement-casino-future",
     "last_verified": "2026-03-08"
@@ -30,7 +32,7 @@
     "category": "facility",
     "key": "investment_amount",
     "value_jpy": 1513000000000,
-    "currency": "JPY",
+
     "note": "約1兆5,130億円",
     "source_article": "ir-amusement-casino-future",
     "last_verified": "2026-03-08"
@@ -73,7 +75,7 @@
     "category": "facility",
     "key": "annual_economic_impact",
     "value_jpy": 1140000000000,
-    "currency": "JPY",
+
     "unit": "jpy_per_year",
     "note": "年間約1兆1,400億円（大阪府の公式試算）",
     "source_article": "ir-amusement-casino-future",
@@ -104,7 +106,7 @@
     "category": "comparison",
     "key": "marina_bay_sands_investment",
     "value_jpy": 550000000000,
-    "currency": "JPY",
+
     "note": "約5,500億円。大阪IRは約3倍",
     "source_article": "ir-amusement-casino-future",
     "last_verified": "2026-03-08"

@@ -30,6 +30,7 @@ interface BarChartMDXProps {
   height?: number | string;
   source?: string;
   keys?: KeyItem[] | string;
+  stacked?: boolean | string;
 }
 
 function parse<T>(v: T | string | undefined): T | undefined {
@@ -49,13 +50,15 @@ export function BarChartMDX({
   height: rawHeight = 400,
   source,
   keys: rawKeys,
+  stacked: rawStacked = false,
 }: BarChartMDXProps) {
   const data = parse<DataItem[]>(rawData);
   const keys = parse<KeyItem[]>(rawKeys);
   const layout = typeof rawLayout === "string" ? rawLayout : "horizontal";
   const height = typeof rawHeight === "string" ? parseInt(rawHeight, 10) : rawHeight;
   const isVertical = layout === "vertical";
-  const isStacked = keys && keys.length > 0;
+  const hasKeys = keys && keys.length > 0;
+  const isStacked = hasKeys && (typeof rawStacked === "string" ? rawStacked === "true" : rawStacked);
 
   if (!data || !Array.isArray(data)) return null;
 
@@ -90,12 +93,14 @@ export function BarChartMDX({
               boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
             }}
           />
-          {isStacked ? (
+          {hasKeys ? (
             <>
               <Legend />
               {keys.map((k, i) => (
-                <Bar key={k.dataKey} dataKey={k.dataKey} name={k.name} stackId="a"
-                  fill={k.color || COLORS[i % COLORS.length]} radius={i === keys.length - 1 ? [4, 4, 0, 0] : [0, 0, 0, 0]} />
+                <Bar key={k.dataKey} dataKey={k.dataKey} name={k.name}
+                  stackId={isStacked ? "a" : undefined}
+                  fill={k.color || COLORS[i % COLORS.length]}
+                  radius={isVertical ? [0, 4, 4, 0] : [4, 4, 0, 0]} />
               ))}
             </>
           ) : (

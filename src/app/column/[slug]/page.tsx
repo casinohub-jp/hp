@@ -6,6 +6,9 @@ import remarkGfm from "remark-gfm";
 import { getArticle, getAllSlugs } from "@/lib/media";
 import { notFound } from "next/navigation";
 import Comments from "@/components/Comments";
+import { BarChartMDX, LineChartMDX, PieChartMDX } from "@/components/charts";
+
+const mdxComponents = { BarChart: BarChartMDX, LineChart: LineChartMDX, PieChart: PieChartMDX };
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -130,7 +133,7 @@ export default async function ArticlePage({ params }: Props) {
           <div className="prose-ch">
             <MDXRemote
               source={article.content}
-              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} components={mdxComponents}
             />
           </div>
           <Comments project="casinohub" articleSlug={slug} />

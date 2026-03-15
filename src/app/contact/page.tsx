@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   openGraph: {
     url: "https://casinohub.jp/contact",
   },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function ContactPage() {

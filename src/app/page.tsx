@@ -9,10 +9,41 @@ import {
   MessageCircle,
   Sparkles,
 } from "lucide-react";
-import { FEATURES, FAQ_ITEMS } from "@/lib/constants";
+import { FEATURES, FAQ_ITEMS, BRAND } from "@/lib/constants";
 import { getAllArticles } from "@/lib/media";
 import { ArticleCard } from "@/components/ArticleCard";
 import { WaitingListForm } from "@/components/WaitingListForm";
+
+/* JSON-LD: FAQPage構造化データ */
+const jsonLdFaq = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
+
+/* JSON-LD: SoftwareApplication構造化データ */
+const jsonLdSoftware = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: BRAND.name,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description: BRAND.description,
+  url: BRAND.url,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "JPY",
+    description: "βテスト期間中は無料",
+  },
+};
 
 const ICON_MAP = {
   Trophy,
@@ -33,6 +64,14 @@ export default function HomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSoftware) }}
+      />
       {/* ===== Hero（ダーク島） ===== */}
       <section className="relative min-h-[92vh] flex items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-ch-hero-from via-[#1a0d3d] to-ch-hero-to">
         {/* グロー */}
